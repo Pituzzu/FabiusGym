@@ -1,98 +1,126 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.text}>Benvenuto su GymFabius! 💪</Text>
+        <Text style={styles.textSub}>Cosa succede in palestra oggi?</Text>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <View style={styles.infoContainer}>
+        <View style={styles.blocco}>
+          <Text style={styles.textinfo}>INGRESSI {"\n"} 0</Text>
+          <Ionicons name="log-out-outline" size={30} color={'#459E7B'} />
+        </View>
+        <View style={styles.blocco}>
+          <Text style={styles.textinfo}>ISCRITTI {"\n"} 0</Text>
+          <Ionicons name="person-add-outline" size={30} color={'#A77BFF'} />
+        </View>
+      </View>
+
+      {/* Contenitore con altezza controllata */}
+      <View style={styles.listWrapper}>
+        <View style={styles.header1}>
+          <Ionicons name="timer-outline" size={24} color="#5CB4EA" />
+          <Text style={styles.listTitle}>Ingressi di Oggi</Text>
+          <Text style={styles.listTitle1}>Vedi Tutti</Text>
+        </View>
+
+
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Esempio di riga con testo protetto */}
+          
+
+          <View style={styles.itemRow}>
+            <Ionicons name="ellipse-sharp" size={24} color="#64def3" />
+            <Text style={styles.itemText} numberOfLines={1}>Luca Bianchi</Text>
+            <Text style={styles.itemText1} numberOfLines={1}>18:25</Text>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+
+  header: { 
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  header1: { 
+    // alignItems: 'center', 
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+    marginBottom: 10,
+  },
+
+  container: {
+    flex: 1,
+    backgroundColor: '#101010',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  text: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
+  textSub: { fontSize: 18, color: '#aaa', marginTop: 5 },
+
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  blocco: {
+    flexDirection: 'row',
+    backgroundColor: '#1A1C24',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '45%',
+    padding: 15,
+    borderRadius: 20,
+  },
+  textinfo: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+
+  // Gestione Altezza Box
+  listWrapper: {
+    height: 300, // Altezza fissa per evitare che occupi tutto lo schermo
+    width: '90%',
+    backgroundColor: '#1A1C24',
+    marginTop: 30,
+    borderRadius: 25,
+    padding: 20,
+  },
+  listTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 15 },
+  listTitle1: { color: '#5CB4EA', fontSize: 16, fontWeight: 'bold' },
+
+  scrollView: { flex: 1 },
+  scrollContent: { paddingBottom: 10 },
+
+  // Stile per la riga dell'iscritto
+  itemRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    backgroundColor: '#252833',
+    padding: 12,
+    borderRadius: 15,
+    marginBottom: 10,
+    // justifyContent: 'space-between',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  itemText: {
+    color: '#fff',
+    fontSize: 16,
+    marginLeft: 10,
+    flex: 1, // Costringe il testo a occupare lo spazio rimanente senza uscire
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  itemText1: {
+    color: '#aaa',
+    fontSize: 14,
+    marginLeft: 10,
+    flexShrink: 0, // Impedisce al testo dell'orario di ridursi
   },
 });

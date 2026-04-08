@@ -1,0 +1,23 @@
+[debug] [2026-04-08T12:42:39.081Z] ----------------------------------------------------------------------
+[debug] [2026-04-08T12:42:39.083Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-04-08T12:42:39.083Z] CLI Version:   15.13.0
+[debug] [2026-04-08T12:42:39.083Z] Platform:      win32
+[debug] [2026-04-08T12:42:39.083Z] Node Version:  v22.15.1
+[debug] [2026-04-08T12:42:39.084Z] Time:          Wed Apr 08 2026 14:42:39 GMT+0200 (Ora legale dell’Europa centrale)
+[debug] [2026-04-08T12:42:39.084Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\matte
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
