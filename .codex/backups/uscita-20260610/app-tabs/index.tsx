@@ -1,6 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import { Ionicons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
+import { getDatabase, onValue, ref, set } from 'firebase/database';
 import {
   collection,
   doc,
@@ -10,58 +10,36 @@ import {
   runTransaction,
   serverTimestamp,
   where,
-  writeBatch,
-} from "firebase/firestore";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { db } from "../config/firebaseConfig";
+  writeBatch
+} from 'firebase/firestore';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { db } from '../config/firebaseConfig';
 
 // --- 1. FUNZIONI DI LOGICA (Fuori dal componente HomeScreen) ---
 
 const getOggiFormatoIT = () => {
   const oggi = new Date();
-  const giorno = String(oggi.getDate()).padStart(2, "0");
-  const mese = String(oggi.getMonth() + 1).padStart(2, "0");
+  const giorno = String(oggi.getDate()).padStart(2, '0');
+  const mese = String(oggi.getMonth() + 1).padStart(2, '0');
   const anno = oggi.getFullYear();
 
   return `${giorno}-${mese}-${anno}`;
 };
 
 const getPercorsiData = (data: string) => {
-  const [giorno, mese, anno] = data.split("-");
+  const [giorno, mese, anno] = data.split('-');
   const giornoNormale = String(Number(giorno));
   const meseNormale = String(Number(mese));
-  const giornoPad = giorno.padStart(2, "0");
-  const mesePad = mese.padStart(2, "0");
+  const giornoPad = giorno.padStart(2, '0');
+  const mesePad = mese.padStart(2, '0');
 
-  return Array.from(
-    new Map([
-      [
-        `${anno}/${mesePad}/${giornoPad}-${mesePad}-${anno}`,
-        { anno, mese: mesePad, giorno: `${giornoPad}-${mesePad}-${anno}` },
-      ],
-      [
-        `${anno}/${mesePad}/${giornoNormale}-${meseNormale}-${anno}`,
-        {
-          anno,
-          mese: mesePad,
-          giorno: `${giornoNormale}-${meseNormale}-${anno}`,
-        },
-      ],
-      [
-        `${anno}/${meseNormale}/${giornoNormale}-${meseNormale}-${anno}`,
-        {
-          anno,
-          mese: meseNormale,
-          giorno: `${giornoNormale}-${meseNormale}-${anno}`,
-        },
-      ],
-      [
-        `${anno}/${meseNormale}/${giornoPad}-${mesePad}-${anno}`,
-        { anno, mese: meseNormale, giorno: `${giornoPad}-${mesePad}-${anno}` },
-      ],
-    ]).values(),
-  );
+  return Array.from(new Map([
+    [`${anno}/${mesePad}/${giornoPad}-${mesePad}-${anno}`, { anno, mese: mesePad, giorno: `${giornoPad}-${mesePad}-${anno}` }],
+    [`${anno}/${mesePad}/${giornoNormale}-${meseNormale}-${anno}`, { anno, mese: mesePad, giorno: `${giornoNormale}-${meseNormale}-${anno}` }],
+    [`${anno}/${meseNormale}/${giornoNormale}-${meseNormale}-${anno}`, { anno, mese: meseNormale, giorno: `${giornoNormale}-${meseNormale}-${anno}` }],
+    [`${anno}/${meseNormale}/${giornoPad}-${mesePad}-${anno}`, { anno, mese: meseNormale, giorno: `${giornoPad}-${mesePad}-${anno}` }],
+  ]).values());
 };
 
 const getIngressoMs = (ingresso: any) => {
@@ -72,21 +50,8 @@ const getIngressoMs = (ingresso: any) => {
   return 0;
 };
 
-const getEventoAccessoMs = (accesso: any) =>
-  Math.max(
-    getIngressoMs(accesso?.ingresso),
-    getIngressoMs(accesso?.uscita),
-    Number(accesso?.ingresso_ms) || 0,
-    Number(accesso?.uscita_ms) || 0,
-  );
-
-const accessoRisultaUscito = (accesso: any) =>
-  accesso?.stato === "uscito" || !!accesso?.uscita || !!accesso?.uscita_ms;
-
 const parseDataIT = (data: string) => {
-  const [giorno, mese, anno] = String(data || "")
-    .split("-")
-    .map(Number);
+  const [giorno, mese, anno] = String(data || '').split('-').map(Number);
 
   if (!giorno || !mese || !anno) {
     return null;
@@ -120,10 +85,7 @@ const stessaSettimana = (dataA: string, dataB: string) => {
     return false;
   }
 
-  return (
-    inizioSettimana(primaData).getTime() ===
-    inizioSettimana(secondaData).getTime()
-  );
+  return inizioSettimana(primaData).getTime() === inizioSettimana(secondaData).getTime();
 };
 
 const stessaData = (dataA: string, dataB: string) => {
@@ -141,24 +103,15 @@ const stessaData = (dataA: string, dataB: string) => {
 };
 
 const DUPLICATE_SCAN_WINDOW_MS = 1500;
-const MIN_EXIT_AFTER_ENTRY_MS = 2 * 60 * 1000;
-const CARD_RESET_RECUPERI = "C34F8E0D";
+const CARD_RESET_RECUPERI = 'C34F8E0D';
 const GIORNI_APERTURA_SETTIMANALI = 5;
 const VENERDI = 5;
-const isCardResetRecuperi = (cardId: string) =>
-  cardId.trim().toUpperCase() === CARD_RESET_RECUPERI;
-type TipoNotifica = "success" | "warning" | "error";
+const isCardResetRecuperi = (cardId: string) => cardId.trim().toUpperCase() === CARD_RESET_RECUPERI;
+type TipoNotifica = 'success' | 'warning' | 'error';
 type NotificaAccesso = {
   titolo: string;
   messaggio: string;
   tipo: TipoNotifica;
-};
-type TipoAccessoRegistrato = "ingresso" | "uscita";
-type RisultatoAccessoSocio = {
-  nome?: string;
-  cognome?: string;
-  tipoAccesso: TipoAccessoRegistrato;
-  [key: string]: any;
 };
 
 const toNumeroSicuro = (valore: unknown) => {
@@ -166,27 +119,21 @@ const toNumeroSicuro = (valore: unknown) => {
   return Number.isFinite(numero) ? numero : 0;
 };
 
-const calcolaFrequenzaConRecuperiLimitati = (
-  frequenza: unknown,
-  recupero: unknown,
-) => {
+const calcolaFrequenzaConRecuperiLimitati = (frequenza: unknown, recupero: unknown) => {
   const frequenzaSettimanale = toNumeroSicuro(frequenza);
   const recuperoGg = toNumeroSicuro(recupero);
   const frequenzaBase = Math.min(
     Math.max(frequenzaSettimanale - recuperoGg, 0),
-    GIORNI_APERTURA_SETTIMANALI,
+    GIORNI_APERTURA_SETTIMANALI
   );
-  const recuperoMassimo = Math.max(
-    GIORNI_APERTURA_SETTIMANALI - frequenzaBase,
-    0,
-  );
+  const recuperoMassimo = Math.max(GIORNI_APERTURA_SETTIMANALI - frequenzaBase, 0);
   const recuperoLimitato = Math.min(Math.max(recuperoGg, 0), recuperoMassimo);
 
   return {
     frequenzaBase,
     recuperoMassimo,
     recuperoLimitato,
-    frequenzaTotale: frequenzaBase + recuperoLimitato,
+    frequenzaTotale: frequenzaBase + recuperoLimitato
   };
 };
 
@@ -206,14 +153,13 @@ const eseguiResetRecuperiSettimanali = async () => {
   let sociMeseScaduto = 0;
 
   const dataToNum = (dStr: string) => {
-    const [g, m, a] = dStr.split("-").map(Number);
+    const [g, m, a] = dStr.split('-').map(Number);
     return new Date(a, m - 1, g).getTime();
   };
 
   for (const socioDoc of sociSnapshot.docs) {
     const dati = socioDoc.data();
-    const meseScaduto =
-      dati.dataScadenza && dataToNum(oggi) > dataToNum(dati.dataScadenza);
+    const meseScaduto = dati.dataScadenza && dataToNum(oggi) > dataToNum(dati.dataScadenza);
 
     if (meseScaduto) {
       sociMeseScaduto += 1;
@@ -227,18 +173,17 @@ const eseguiResetRecuperiSettimanali = async () => {
     const calcolo_frequenza = toNumeroSicuro(dati.calc_frequenza);
     const frequenza_settimanale = dati.frequenza || 0;
     const recupero_gg = dati.recupero || 0;
-    const { frequenzaBase, recuperoMassimo } =
-      calcolaFrequenzaConRecuperiLimitati(frequenza_settimanale, recupero_gg);
+    const { frequenzaBase, recuperoMassimo } = calcolaFrequenzaConRecuperiLimitati(frequenza_settimanale, recupero_gg);
     const recuperoDaAttribuire = Math.min(
       Math.max(frequenzaBase - calcolo_frequenza, 0),
-      recuperoMassimo,
+      recuperoMassimo
     );
 
     batch.update(socioDoc.ref, {
       calc_frequenza: 0,
       frequenza: frequenzaBase + recuperoDaAttribuire,
       recupero: recuperoDaAttribuire,
-      ultimo_reset_recuperi: oggi,
+      ultimo_reset_recuperi: oggi
     });
 
     operazioniBatch += 1;
@@ -258,20 +203,14 @@ const eseguiResetRecuperiSettimanali = async () => {
   return { sociAggiornati, sociGiaAggiornati, sociMeseScaduto };
 };
 
-const registraIngressoSocio = async (
-  cardId: string,
-  scanTime: number = Date.now(),
-): Promise<RisultatoAccessoSocio> => {
+const registraIngressoSocio = async (cardId: string, scanTime: number = Date.now()) => {
   const cardIdPulita = cardId.trim();
   const oggi = getOggiFormatoIT();
   const dataRef = new Date();
   const anno = String(dataRef.getFullYear());
-  const mese = String(dataRef.getMonth() + 1).padStart(2, "0");
+  const mese = String(dataRef.getMonth() + 1).padStart(2, '0');
 
-  const qSocio = query(
-    collection(db, "soci"),
-    where("cardId", "==", cardIdPulita),
-  );
+  const qSocio = query(collection(db, "soci"), where("cardId", "==", cardIdPulita));
   const querySnapshot = await getDocs(qSocio);
   if (querySnapshot.empty) throw "USER_NOT_FOUND";
 
@@ -279,58 +218,15 @@ const registraIngressoSocio = async (
   const socioId = socioDoc.id;
   const socioData = socioDoc.data();
   const socioDocRef = doc(db, "soci", socioId);
-  const ingressiOggiRef = collection(
-    db,
-    "accessi",
-    anno,
-    mese,
-    oggi,
-    "ingressi_del_giorno",
-  );
+  const ingressiOggiRef = collection(db, 'accessi', anno, mese, oggi, 'ingressi_del_giorno');
   const ingressoDocRef = doc(ingressiOggiRef, socioId);
-  const ingressiOggiRefs = new Map<string, any>();
-
-  await Promise.all(
-    getPercorsiData(oggi).map(async (percorso) => {
-      const ingressiRef = collection(
-        db,
-        "accessi",
-        percorso.anno,
-        percorso.mese,
-        percorso.giorno,
-        "ingressi_del_giorno",
-      );
-      const ingressoDirettoRef = doc(ingressiRef, socioId);
-      const ingressiSocioSnapshot = await getDocs(
-        query(ingressiRef, where("socioId", "==", socioId)),
-      );
-
-      ingressiOggiRefs.set(ingressoDirettoRef.path, ingressoDirettoRef);
-      ingressiSocioSnapshot.docs.forEach((ingressoDoc) => {
-        ingressiOggiRefs.set(ingressoDoc.ref.path, ingressoDoc.ref);
-      });
-    }),
-  );
-
+  const ingressoGiaInStorico = !(await getDocs(query(ingressiOggiRef, where("socioId", "==", socioId)))).empty;
   let erroreAccesso: string | null = null;
-  let tipoAccesso: TipoAccessoRegistrato = "ingresso";
 
   await runTransaction(db, async (transaction) => {
     const snapSocio = await transaction.get(socioDocRef);
     if (!snapSocio.exists()) throw "USER_NOT_FOUND";
     const snapIngressoOggi = await transaction.get(ingressoDocRef);
-    const snapIngressiOggi = [];
-
-    for (const ingressoRef of ingressiOggiRefs.values()) {
-      const snapIngresso =
-        ingressoRef.path === ingressoDocRef.path
-          ? snapIngressoOggi
-          : await transaction.get(ingressoRef);
-
-      if (snapIngresso.exists()) {
-        snapIngressiOggi.push(snapIngresso);
-      }
-    }
 
     const dati = snapSocio.data();
     const dataUltimoAccesso = dati.ultimo_giorno_accesso || "";
@@ -351,64 +247,18 @@ const registraIngressoSocio = async (
       ingressiOggi = 0;
     }
 
-    const ingressoGiaRegistratoOggi = snapIngressiOggi.length > 0;
+    const ingressoGiaRegistratoOggi = snapIngressoOggi.exists() || ingressoGiaInStorico;
     const profiloSegnaIngressoOggi = ingressiOggi >= 1 && ultimoAccessoOggi;
-    const stessoPassaggioGiaProcessato =
-      ultimoAccessoOggi &&
+    const stessoPassaggioGiaProcessato = ultimoAccessoOggi &&
       ultimoIngressoMs &&
       Math.abs(scanTime - ultimoIngressoMs) < DUPLICATE_SCAN_WINDOW_MS;
-    const ingressiAperti = snapIngressiOggi
-      .filter((snapIngresso) => !accessoRisultaUscito(snapIngresso.data()))
-      .sort(
-        (a, b) => getEventoAccessoMs(b.data()) - getEventoAccessoMs(a.data()),
-      );
-    const ingressoAperto = ingressiAperti[0];
-    const datiIngressoOggi = (ingressoAperto?.data() ||
-      (snapIngressoOggi.exists() ? snapIngressoOggi.data() : null)) as any;
-    const uscitaGiaRegistrata = !!(
-      datiIngressoOggi?.uscita ||
-      datiIngressoOggi?.uscita_ms ||
-      datiIngressoOggi?.stato === "uscito"
-    );
-    const ingressoMs =
-      getIngressoMs(datiIngressoOggi?.ingresso) || ultimoIngressoMs || 0;
-
-    if (ingressoAperto && !uscitaGiaRegistrata) {
-      if (stessoPassaggioGiaProcessato) {
-        throw "DUPLICATE_SCAN";
-      }
-
-      if (!ingressoMs || scanTime - ingressoMs < MIN_EXIT_AFTER_ENTRY_MS) {
-        erroreAccesso = "EXIT_TOO_EARLY";
-        return;
-      }
-
-      ingressiAperti.forEach((snapIngresso) => {
-        transaction.update(snapIngresso.ref, {
-          uscita: serverTimestamp(),
-          uscita_ms: scanTime,
-          stato: "uscito",
-        });
-      });
-
-      transaction.update(socioDocRef, {
-        ultimo_giorno_uscita: oggi,
-        ultimo_uscita_ms: scanTime,
-        ultimo_ingresso_ms: scanTime,
-      });
-
-      tipoAccesso = "uscita";
-      return;
-    }
 
     if (ingressoGiaRegistratoOggi || profiloSegnaIngressoOggi) {
       if (stessoPassaggioGiaProcessato) {
         throw "DUPLICATE_SCAN";
       }
 
-      const anomaliaDocRef = doc(
-        collection(db, "anomalie", anno, mese, oggi, "eventi"),
-      );
+      const anomaliaDocRef = doc(collection(db, 'anomalie', anno, mese, oggi, 'eventi'));
 
       if (!ingressoGiaRegistratoOggi && profiloSegnaIngressoOggi) {
         transaction.set(ingressoDocRef, {
@@ -417,7 +267,7 @@ const registraIngressoSocio = async (
           cardId: cardIdPulita,
           ingresso: serverTimestamp(),
           socioId: socioId,
-          ripristinato: true,
+          ripristinato: true
         });
       }
 
@@ -425,17 +275,17 @@ const registraIngressoSocio = async (
         doppio_ingresso: Math.max(ingressiOggi, 1),
         anomalia_doppio_ingresso: (dati.anomalia_doppio_ingresso || 0) + 1,
         data_anomalia_doppio_ingresso: oggi,
-        ultimo_tentativo_doppio_ingresso_ms: scanTime,
+        ultimo_tentativo_doppio_ingresso_ms: scanTime
       });
 
       transaction.set(anomaliaDocRef, {
-        tipo: "doppio_ingresso",
+        tipo: 'doppio_ingresso',
         nome: socioData.nome,
         cognome: socioData.cognome,
         cardId: cardIdPulita,
         socioId: socioId,
         data: oggi,
-        creato: serverTimestamp(),
+        creato: serverTimestamp()
       });
 
       erroreAccesso = "ALREADY_IN";
@@ -444,7 +294,7 @@ const registraIngressoSocio = async (
 
     // --- HELPER PER CONFRONTO DATE ---
     const dataToNum = (dStr: string) => {
-      const [g, m, a] = dStr.split("-").map(Number);
+      const [g, m, a] = dStr.split('-').map(Number);
       return new Date(a, m - 1, g).getTime();
     };
 
@@ -454,23 +304,14 @@ const registraIngressoSocio = async (
         ingressiOggi = 0;
       }
 
-      const { frequenzaBase } = calcolaFrequenzaConRecuperiLimitati(
-        frequenza_settimanale,
-        recupero_gg,
-      );
-      const anomaliaDocRef = doc(
-        collection(db, "anomalie", anno, mese, oggi, "eventi"),
-      );
+      const { frequenzaBase } = calcolaFrequenzaConRecuperiLimitati(frequenza_settimanale, recupero_gg);
+      const anomaliaDocRef = doc(collection(db, 'anomalie', anno, mese, oggi, 'eventi'));
       transaction.set(ingressoDocRef, {
         nome: socioData.nome,
         cognome: socioData.cognome,
         cardId: cardIdPulita,
         ingresso: serverTimestamp(),
-        uscita: null,
-        uscita_ms: null,
-        stato: "dentro",
-        gestioneUscita: true,
-        socioId: socioId,
+        socioId: socioId
       });
 
       transaction.update(socioDocRef, {
@@ -482,17 +323,17 @@ const registraIngressoSocio = async (
         recupero: 0,
         anomalia_mese_scaduto: (dati.anomalia_mese_scaduto || 0) + 1,
         data_anomalia_mese_scaduto: oggi,
-        ultimo_tentativo_mese_scaduto_ms: scanTime,
+        ultimo_tentativo_mese_scaduto_ms: scanTime
       });
 
       transaction.set(anomaliaDocRef, {
-        tipo: "mese_scaduto",
+        tipo: 'mese_scaduto',
         nome: socioData.nome,
         cognome: socioData.cognome,
         cardId: cardIdPulita,
         socioId: socioId,
         data: oggi,
-        creato: serverTimestamp(),
+        creato: serverTimestamp()
       });
 
       erroreAccesso = "Mese scaduto";
@@ -508,24 +349,22 @@ const registraIngressoSocio = async (
         throw "DUPLICATE_SCAN";
       }
 
-      const anomaliaDocRef = doc(
-        collection(db, "anomalie", anno, mese, oggi, "eventi"),
-      );
+      const anomaliaDocRef = doc(collection(db, 'anomalie', anno, mese, oggi, 'eventi'));
 
       transaction.update(socioDocRef, {
         anomalia_doppio_ingresso: (dati.anomalia_doppio_ingresso || 0) + 1,
         data_anomalia_doppio_ingresso: oggi,
-        ultimo_tentativo_doppio_ingresso_ms: scanTime,
+        ultimo_tentativo_doppio_ingresso_ms: scanTime
       });
 
       transaction.set(anomaliaDocRef, {
-        tipo: "doppio_ingresso",
+        tipo: 'doppio_ingresso',
         nome: socioData.nome,
         cognome: socioData.cognome,
         cardId: cardIdPulita,
         socioId: socioId,
         data: oggi,
-        creato: serverTimestamp(),
+        creato: serverTimestamp()
       });
 
       erroreAccesso = "ALREADY_IN";
@@ -535,33 +374,28 @@ const registraIngressoSocio = async (
 
     // --- BLOCCO FREQUENZA MASSIMA ---
     if (incrementaFrequenza && calcolo_frequenza >= frequenza_settimanale) {
-      const anomaliaDocRef = doc(
-        collection(db, "anomalie", anno, mese, oggi, "eventi"),
-      );
+      const anomaliaDocRef = doc(collection(db, 'anomalie', anno, mese, oggi, 'eventi'));
 
       transaction.update(socioDocRef, {
-        anomalia_frequenza_settimanale:
-          (dati.anomalia_frequenza_settimanale || 0) + 1,
+        anomalia_frequenza_settimanale: (dati.anomalia_frequenza_settimanale || 0) + 1,
         data_anomalia_frequenza_settimanale: oggi,
-        ultimo_tentativo_frequenza_settimanale_ms: scanTime,
+        ultimo_tentativo_frequenza_settimanale_ms: scanTime
       });
 
       transaction.set(anomaliaDocRef, {
-        tipo: "frequenza_settimanale",
+        tipo: 'frequenza_settimanale',
         nome: socioData.nome,
         cognome: socioData.cognome,
         cardId: cardIdPulita,
         socioId: socioId,
         data: oggi,
-        creato: serverTimestamp(),
+        creato: serverTimestamp()
       });
 
       erroreAccesso = "FREQUENCY_EXCEEDED";
       return;
     }
-    const nuovoCalcoloFrequenza = incrementaFrequenza
-      ? calcolo_frequenza + 1
-      : calcolo_frequenza;
+    const nuovoCalcoloFrequenza = incrementaFrequenza ? calcolo_frequenza + 1 : calcolo_frequenza;
 
     // Registrazione fisica ingresso
     transaction.set(ingressoDocRef, {
@@ -569,11 +403,7 @@ const registraIngressoSocio = async (
       cognome: socioData.cognome,
       cardId: cardIdPulita,
       ingresso: serverTimestamp(),
-      uscita: null,
-      uscita_ms: null,
-      stato: "dentro",
-      gestioneUscita: true,
-      socioId: socioId,
+      socioId: socioId
     });
 
     // Aggiornamento contatore socio
@@ -583,13 +413,13 @@ const registraIngressoSocio = async (
       ultimo_ingresso_ms: scanTime,
       calc_frequenza: nuovoCalcoloFrequenza,
       frequenza: frequenza_settimanale,
-      recupero: recupero_gg,
+      recupero: recupero_gg
     });
   });
 
   if (erroreAccesso) throw erroreAccesso;
 
-  return { ...socioData, tipoAccesso };
+  return socioData;
 };
 
 // --- 2. COMPONENTE PRINCIPALE ---
@@ -598,26 +428,22 @@ export default function HomeScreen() {
   const isFocused = useIsFocused();
   const [numeroIscritti, setNumeroIscritti] = useState(0);
   const [ingressiOggi, setIngressiOggi] = useState<any[]>([]);
-  const [notificaAccesso, setNotificaAccesso] =
-    useState<NotificaAccesso | null>(null);
+  const [notificaAccesso, setNotificaAccesso] = useState<NotificaAccesso | null>(null);
   const [giornoCorrente, setGiornoCorrente] = useState(getOggiFormatoIT());
-  const lastProcessedScan = useRef({ cardId: "", time: 0 });
+  const lastProcessedScan = useRef({ cardId: '', time: 0 });
   const notificaTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const mostraNotifica = useCallback(
-    (titolo: string, messaggio: string, tipo: TipoNotifica) => {
-      if (notificaTimer.current) {
-        clearTimeout(notificaTimer.current);
-      }
+  const mostraNotifica = useCallback((titolo: string, messaggio: string, tipo: TipoNotifica) => {
+    if (notificaTimer.current) {
+      clearTimeout(notificaTimer.current);
+    }
 
-      setNotificaAccesso({ titolo, messaggio, tipo });
-      notificaTimer.current = setTimeout(() => {
-        setNotificaAccesso(null);
-        notificaTimer.current = null;
-      }, 6000);
-    },
-    [],
-  );
+    setNotificaAccesso({ titolo, messaggio, tipo });
+    notificaTimer.current = setTimeout(() => {
+      setNotificaAccesso(null);
+      notificaTimer.current = null;
+    }, 6000);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -640,9 +466,7 @@ export default function HomeScreen() {
 
   // Listener Iscritti Totali
   useEffect(() => {
-    return onSnapshot(collection(db, "soci"), (snap) =>
-      setNumeroIscritti(snap.size),
-    );
+    return onSnapshot(collection(db, 'soci'), (snap) => setNumeroIscritti(snap.size));
   }, []);
 
   // Listener Ingressi del Giorno (Lista)
@@ -650,64 +474,45 @@ export default function HomeScreen() {
   useEffect(() => {
     const ingressiPerPath = new Map<string, any[]>();
     const aggiornaListaIngressi = () => {
-      // Ordiniamo per orario decrescente (il più recente in alto)
+
+    // Ordiniamo per orario decrescente (il più recente in alto)
 
       const listaCompleta = Array.from(ingressiPerPath.values())
         .flat()
-        .sort((a, b) => getEventoAccessoMs(b) - getEventoAccessoMs(a));
-      const ultimoStatoPerSocio = new Map();
+        .sort((a, b) => getIngressoMs(b.ingresso) - getIngressoMs(a.ingresso));
+      const listaFiltrata = new Map();
 
       listaCompleta.forEach((dati) => {
         const idSocio = dati.socioId;
 
-        if (isCardResetRecuperi(String(dati.cardId || ""))) {
-          return;
-        }
-
-        if (!idSocio || ultimoStatoPerSocio.has(idSocio)) {
+        if (isCardResetRecuperi(String(dati.cardId || ''))) {
           return;
         }
 
         // Se il socio non è ancora nella mappa, lo aggiungiamo.
         // Essendo la query ordinata per 'desc', il primo che troviamo è il più recente.
-        ultimoStatoPerSocio.set(idSocio, dati);
+        if (!listaFiltrata.has(idSocio)) {
+          listaFiltrata.set(idSocio, dati);
+        }
       });
 
       // Trasformiamo la mappa di nuovo in un array per lo stato
-      setIngressiOggi(
-        Array.from(ultimoStatoPerSocio.values()).filter(
-          (dati) => !accessoRisultaUscito(dati),
-        ),
-      );
+      setIngressiOggi(Array.from(listaFiltrata.values()));
     };
 
     const unsubscribeList = getPercorsiData(giornoCorrente).map((percorso) => {
       const pathKey = `${percorso.anno}/${percorso.mese}/${percorso.giorno}`;
-      const path = collection(
-        db,
-        "accessi",
-        percorso.anno,
-        percorso.mese,
-        percorso.giorno,
-        "ingressi_del_giorno",
-      );
+      const path = collection(db, 'accessi', percorso.anno, percorso.mese, percorso.giorno, 'ingressi_del_giorno');
 
-      return onSnapshot(
-        path,
-        (snapshot) => {
-          ingressiPerPath.set(
-            pathKey,
-            snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })),
-          );
-          aggiornaListaIngressi();
-        },
-        (error) => {
-          console.error("Errore onSnapshot ingressi:", error);
-        },
-      );
+      return onSnapshot(path, (snapshot) => {
+        ingressiPerPath.set(pathKey, snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })));
+        aggiornaListaIngressi();
+      }, (error) => {
+        console.error("Errore onSnapshot ingressi:", error);
+      });
     });
 
     return () => {
@@ -722,19 +527,18 @@ export default function HomeScreen() {
     }
 
     const dbRT = getDatabase();
-    const scanRef = ref(dbRT, "ultimo_accesso");
+    const scanRef = ref(dbRT, 'ultimo_accesso');
 
     return onValue(scanRef, async (snapshot) => {
       const cardId = snapshot.val();
       const ora = Date.now();
-      const cardIdPulita = String(cardId || "").trim();
+      const cardIdPulita = String(cardId || '').trim();
 
       if (!cardIdPulita) return;
       if (
         lastProcessedScan.current.cardId === cardIdPulita &&
         ora - lastProcessedScan.current.time < DUPLICATE_SCAN_WINDOW_MS
-      )
-        return;
+      ) return;
       lastProcessedScan.current = { cardId: cardIdPulita, time: ora };
 
       try {
@@ -744,57 +548,27 @@ export default function HomeScreen() {
           mostraNotifica(
             "Reset completato",
             `Soci aggiornati: ${risultato.sociAggiornati}. Gia aggiornati oggi: ${risultato.sociGiaAggiornati}. Mesi scaduti rilevati: ${risultato.sociMeseScaduto}.`,
-            "success",
+            "success"
           );
           return;
         }
 
         const socio = await registraIngressoSocio(cardIdPulita, ora);
-
-        if (socio.tipoAccesso === "uscita") {
-          mostraNotifica(
-            "Uscita registrata",
-            `${socio.nome} ${socio.cognome}`,
-            "success",
-          );
-        } else {
-          mostraNotifica(
-            "Benvenuto",
-            `${socio.nome} ${socio.cognome}`,
-            "success",
-          );
-        }
+        mostraNotifica("Benvenuto", `${socio.nome} ${socio.cognome}`, "success");
       } catch (error) {
         if (error === "DUPLICATE_SCAN") {
           return;
         } else if (error === "ALREADY_IN") {
           mostraNotifica("Doppio ingresso", "Socio gia entrato oggi.", "error");
-        } else if (error === "EXIT_TOO_EARLY") {
-          mostraNotifica(
-            "Uscita non registrata",
-            "Devono passare almeno 2 minuti dall'ingresso.",
-            "warning",
-          );
         } else if (error === "USER_NOT_FOUND") {
           mostraNotifica("Tessera non registrata", cardIdPulita, "warning");
         } else if (error === "FREQUENCY_EXCEEDED") {
-          mostraNotifica(
-            "Accesso negato",
-            "Frequenza settimanale superata.",
-            "error",
-          );
+          mostraNotifica("Accesso negato", "Frequenza settimanale superata.", "error");
         } else if (error === "Mese scaduto") {
-          mostraNotifica(
-            "Mese scaduto",
-            "Ingresso registrato. Sistemare il pagamento.",
-            "warning",
-          );
+          mostraNotifica("Mese scaduto", "Ingresso registrato. Sistemare il pagamento.", "warning");
+
         } else if (error === "RESET_NOT_FRIDAY") {
-          mostraNotifica(
-            "Reset non disponibile",
-            "La card di reset funziona solo il venerdi.",
-            "warning",
-          );
+          mostraNotifica("Reset non disponibile", "La card di reset funziona solo il venerdi.", "warning");
         } else {
           console.error("Errore:", error);
           mostraNotifica("Errore", "Ingresso non registrato.", "error");
@@ -811,14 +585,12 @@ export default function HomeScreen() {
       </View>
 
       {notificaAccesso && (
-        <View
-          style={[
-            styles.notice,
-            notificaAccesso.tipo === "success" && styles.noticeSuccess,
-            notificaAccesso.tipo === "warning" && styles.noticeWarning,
-            notificaAccesso.tipo === "error" && styles.noticeError,
-          ]}
-        >
+        <View style={[
+          styles.notice,
+          notificaAccesso.tipo === 'success' && styles.noticeSuccess,
+          notificaAccesso.tipo === 'warning' && styles.noticeWarning,
+          notificaAccesso.tipo === 'error' && styles.noticeError
+        ]}>
           <Text style={styles.noticeTitle}>{notificaAccesso.titolo}</Text>
           <Text style={styles.noticeText}>{notificaAccesso.messaggio}</Text>
         </View>
@@ -826,44 +598,29 @@ export default function HomeScreen() {
 
       <View style={styles.infoContainer}>
         <View style={styles.blocco}>
-          <Text style={styles.textinfo}>
-            PRESENTI {"\n"} {ingressiOggi.length}
-          </Text>
-          <Ionicons name="log-in-outline" size={30} color={"#459E7B"} />
+          <Text style={styles.textinfo}>PRESENTI {"\n"} {ingressiOggi.length}</Text>
+          <Ionicons name="log-in-outline" size={30} color={'#459E7B'} />
         </View>
         <View style={styles.blocco}>
-          <Text style={styles.textinfo}>
-            ISCRITTI {"\n"} {numeroIscritti}
-          </Text>
-          <Ionicons name="people-outline" size={30} color={"#A77BFF"} />
+          <Text style={styles.textinfo}>ISCRITTI {"\n"} {numeroIscritti}</Text>
+          <Ionicons name="people-outline" size={30} color={'#A77BFF'} />
         </View>
       </View>
 
       <View style={styles.listWrapper}>
         <View style={styles.headerLista}>
           <Ionicons name="timer-outline" size={24} color="#5CB4EA" />
-          <Text style={styles.listTitle}>Presenti</Text>
+          <Text style={styles.listTitle}>Ingressi Giornalieri</Text>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           {ingressiOggi.map((item) => (
             <View key={item.id} style={styles.itemRow}>
-              <Ionicons
-                name="person-circle-outline"
-                size={24}
-                color="#64def3"
-              />
+              <Ionicons name="person-circle-outline" size={24} color="#64def3" />
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={styles.itemText}>
-                  {item.nome} {item.cognome}
-                </Text>
+                <Text style={styles.itemText}>{item.nome} {item.cognome}</Text>
               </View>
               <Text style={styles.itemTextTime}>
-                {item.ingresso
-                  ?.toDate()
-                  .toLocaleTimeString("it-IT", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                {item.ingresso?.toDate().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
               </Text>
             </View>
           ))}
@@ -876,72 +633,23 @@ export default function HomeScreen() {
 // --- 3. STILI ---
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#101010",
-    alignItems: "center",
-    paddingTop: 60,
-  },
-  header: { alignItems: "center", marginBottom: 30 },
-  text: { fontSize: 24, fontWeight: "bold", color: "#fff" },
-  textSub: { fontSize: 16, color: "#aaa", marginTop: 5 },
-  notice: {
-    width: "92%",
-    borderLeftWidth: 4,
-    borderRadius: 8,
-    padding: 14,
-    marginBottom: 16,
-  },
-  noticeSuccess: { backgroundColor: "#163328", borderLeftColor: "#459E7B" },
-  noticeWarning: { backgroundColor: "#352a19", borderLeftColor: "#e7bc83" },
-  noticeError: { backgroundColor: "#3a1d24", borderLeftColor: "#ff5c7a" },
-  noticeTitle: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  noticeText: { color: "#ddd", fontSize: 14 },
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    paddingHorizontal: 15,
-  },
-  blocco: {
-    flexDirection: "row",
-    backgroundColor: "#1A1C24",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "46%",
-    padding: 20,
-    borderRadius: 20,
-  },
-  textinfo: { color: "#fff", fontSize: 16, fontWeight: "bold", lineHeight: 22 },
-  listWrapper: {
-    flex: 1,
-    width: "92%",
-    backgroundColor: "#1A1C24",
-    marginTop: 40,
-    borderRadius: 25,
-    padding: 20,
-    marginBottom: 20,
-  },
-  headerLista: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
-  listTitle: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  itemRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#252833",
-    padding: 15,
-    borderRadius: 15,
-    marginBottom: 12,
-  },
-  itemText: { color: "#fff", fontSize: 16 },
-  itemTextTime: { color: "#aaa", fontSize: 14 },
+  container: { flex: 1, backgroundColor: '#101010', alignItems: 'center', paddingTop: 60 },
+  header: { alignItems: 'center', marginBottom: 30 },
+  text: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
+  textSub: { fontSize: 16, color: '#aaa', marginTop: 5 },
+  notice: { width: '92%', borderLeftWidth: 4, borderRadius: 8, padding: 14, marginBottom: 16 },
+  noticeSuccess: { backgroundColor: '#163328', borderLeftColor: '#459E7B' },
+  noticeWarning: { backgroundColor: '#352a19', borderLeftColor: '#e7bc83' },
+  noticeError: { backgroundColor: '#3a1d24', borderLeftColor: '#ff5c7a' },
+  noticeTitle: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginBottom: 4 },
+  noticeText: { color: '#ddd', fontSize: 14 },
+  infoContainer: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', paddingHorizontal: 15 },
+  blocco: { flexDirection: 'row', backgroundColor: '#1A1C24', justifyContent: 'space-between', alignItems: 'center', width: '46%', padding: 20, borderRadius: 20 },
+  textinfo: { color: '#fff', fontSize: 16, fontWeight: 'bold', lineHeight: 22 },
+  listWrapper: { flex: 1, width: '92%', backgroundColor: '#1A1C24', marginTop: 40, borderRadius: 25, padding: 20, marginBottom: 20 },
+  headerLista: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  listTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold', marginLeft: 10 },
+  itemRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#252833', padding: 15, borderRadius: 15, marginBottom: 12 },
+  itemText: { color: '#fff', fontSize: 16 },
+  itemTextTime: { color: '#aaa', fontSize: 14 },
 });

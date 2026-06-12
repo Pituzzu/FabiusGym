@@ -9,9 +9,14 @@
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.fabiusgym.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
       "supportsTablet": true
     },
     "android": {
+      "package": "com.fabiusgym.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -23,7 +28,8 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
@@ -38,13 +44,18 @@
             "backgroundColor": "#000000"
           }
         }
-      ],
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth"
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "baseUrl": ""
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d981e727-e7d1-4be5-8f70-6149815d8089"
+      }
     }
   }
 }

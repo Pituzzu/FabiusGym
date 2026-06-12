@@ -1,0 +1,37 @@
+
+> gymfabius@1.0.0 web
+> expo start --web --port 8081
+
+Starting project at C:\Users\matte\Desktop\React Native Project\gymfabius
+React Compiler enabled
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  1.0% (1/1)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓░░░░░░░░░░░ 35.1% (244/412)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓░░░░░░░░░ 48.8% (399/571)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 85.9% (749/827)
+λ Bundled 9816ms node_modules\expo-router\node\render.js (1017 modules)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 98.9% (867/872)
+Web Bundled 11393ms node_modules\expo-router\entry.js (874 modules)
+Web Bundled 2870ms node_modules\expo-router\entry.js (875 modules)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 382ms node_modules\expo-router\node\render.js (1 module)
+λ Bundled 424ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 1055ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 1077ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 28ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 417ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 45ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 402ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 437ms node_modules\expo-router\node\render.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 436ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 970ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 539ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 1104ms node_modules\expo-router\entry.js (1 module)

@@ -14,12 +14,7 @@ interface SocioIngresso {
   ingresso?: {
     toDate?: () => Date;
   };
-  uscita?: {
-    toDate?: () => Date;
-  };
 }
-
-type FasciaStorico = 'mattina' | 'pomeriggio';
 
 const getPercorsiData = (data: string) => {
   const [giorno, mese, anno] = data.split('-');
@@ -43,55 +38,6 @@ const getIngressoMs = (ingresso: SocioIngresso['ingresso']) => {
 
   return 0;
 };
-
-const parseDataIT = (data: string) => {
-  const [giorno, mese, anno] = String(data || '').split('-').map(Number);
-
-  if (!giorno || !mese || !anno) {
-    return null;
-  }
-
-  const dataParsed = new Date(anno, mese - 1, giorno);
-
-  return Number.isNaN(dataParsed.getTime()) ? null : dataParsed;
-};
-
-const usaTabFasce = (data: string) => {
-  const dataParsed = parseDataIT(data);
-
-  return dataParsed ? [1, 3, 5].includes(dataParsed.getDay()) : false;
-};
-
-const getFasciaIngresso = (socio: SocioIngresso): FasciaStorico | null => {
-  if (!socio.ingresso?.toDate) {
-    return null;
-  }
-
-  const dataIngresso = socio.ingresso.toDate();
-  const minuti = dataIngresso.getHours() * 60 + dataIngresso.getMinutes();
-
-  if (minuti >= 10 * 60 && minuti <= 14 * 60) {
-    return 'mattina';
-  }
-
-  if (minuti >= 16 * 60 && minuti <= 23 * 60) {
-    return 'pomeriggio';
-  }
-
-  return null;
-};
-
-const getFasciaDaOra = (): FasciaStorico => {
-  const minuti = new Date().getHours() * 60 + new Date().getMinutes();
-
-  return minuti >= 16 * 60 ? 'pomeriggio' : 'mattina';
-};
-
-const formattaOrario = (timestamp?: { toDate?: () => Date }) => (
-  timestamp?.toDate
-    ? timestamp.toDate().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-    : '--:--'
-);
 
 export default function SettingsScreen() {
 
@@ -123,9 +69,7 @@ const formattaDataBella = (dataString: string) => {
 
   const [sociFiltrati, setSociFiltrati] = useState<SocioIngresso[]>([]);
   const [giornoSelezionato, setGiornoSelezionato] = useState(getOggiFormatoIT());
-  const [fasciaSelezionata, setFasciaSelezionata] = useState<FasciaStorico>(getFasciaDaOra());
   const ultimoOggi = useRef(giornoSelezionato);
-  const mostraTabFasce = usaTabFasce(giornoSelezionato);
 
   useEffect(() => {
     const aggiornaGiornoSelezionato = () => {
@@ -157,19 +101,12 @@ const formattaDataBella = (dataString: string) => {
   };
 
   useEffect(() => {
-    if (usaTabFasce(giornoSelezionato)) {
-      setFasciaSelezionata(getFasciaDaOra());
-    }
-  }, [giornoSelezionato]);
-
-  useEffect(() => {
     const ingressiPerPath = new Map<string, SocioIngresso[]>();
 
     const aggiornaListaIngressi = () => {
       const listaFiltrata = new Map<string, SocioIngresso>();
       const listaCompleta = Array.from(ingressiPerPath.values())
         .flat()
-        .filter((socio) => !usaTabFasce(giornoSelezionato) || getFasciaIngresso(socio) === fasciaSelezionata)
         .sort((a, b) => getIngressoMs(b.ingresso) - getIngressoMs(a.ingresso));
 
       listaCompleta.forEach((socio) => {
@@ -201,7 +138,7 @@ const formattaDataBella = (dataString: string) => {
     return () => {
       unsubscribeList.forEach((unsubscribe) => unsubscribe());
     };
-  }, [giornoSelezionato, fasciaSelezionata]);
+  }, [giornoSelezionato]);
 
   return (
     <View style={styles.container}>
@@ -240,23 +177,6 @@ const formattaDataBella = (dataString: string) => {
         <Text style={styles.todayButtonText}>Torna a Oggi</Text>
       </TouchableOpacity>
 
-      {mostraTabFasce && (
-        <View style={styles.shiftTabs}>
-          <TouchableOpacity
-            style={[styles.shiftTab, fasciaSelezionata === 'mattina' && styles.shiftTabActive]}
-            onPress={() => setFasciaSelezionata('mattina')}
-          >
-            <Text style={[styles.shiftTabText, fasciaSelezionata === 'mattina' && styles.shiftTabTextActive]}>Mattina</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.shiftTab, fasciaSelezionata === 'pomeriggio' && styles.shiftTabActive]}
-            onPress={() => setFasciaSelezionata('pomeriggio')}
-          >
-            <Text style={[styles.shiftTabText, fasciaSelezionata === 'pomeriggio' && styles.shiftTabTextActive]}>Pomeriggio</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
       {/* Lista Dinamica */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
         {sociFiltrati.length > 0 ? (
@@ -267,10 +187,11 @@ const formattaDataBella = (dataString: string) => {
                 <Text style={styles.itemText}>{socio.nome} {socio.cognome}</Text>
                 <Text style={styles.itemSubtext}>Card: {socio.cardId || '--'}</Text>
               </View>
-              <View style={styles.timeBox}>
-                <Text style={styles.itemTextTime}>In {formattaOrario(socio.ingresso)}</Text>
-                <Text style={styles.itemTextExit}>Out {formattaOrario(socio.uscita)}</Text>
-              </View>
+              <Text style={styles.itemTextTime}>
+                {socio.ingresso?.toDate
+                  ? socio.ingresso.toDate().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+                  : '--:--'}
+              </Text>
             </View>
           ))
         ) : (
@@ -345,29 +266,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  shiftTabs: {
-    flexDirection: 'row',
-    backgroundColor: '#1b1a1a',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 12,
-  },
-  shiftTab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  shiftTabActive: {
-    backgroundColor: '#e7bc83',
-  },
-  shiftTabText: {
-    color: '#fff',
-    fontWeight: '800',
-  },
-  shiftTabTextActive: {
-    color: '#1b1a1a',
-  },
   scrollView: {
     flex: 1,
     marginTop: 5,
@@ -393,19 +291,10 @@ const styles = StyleSheet.create({
     color: '#929090',
     fontSize: 12,
   },
-  timeBox: {
-    alignItems: 'flex-end',
-  },
   itemTextTime: { 
     color: '#e7bc83', 
     fontSize: 15, 
     fontWeight: 'bold' 
-  },
-  itemTextExit: {
-    color: '#8ad7a6',
-    fontSize: 13,
-    fontWeight: 'bold',
-    marginTop: 4,
   },
   emptyContainer: {
     alignItems: 'center',

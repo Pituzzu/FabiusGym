@@ -1,23 +1,362 @@
-[debug] [2026-04-08T12:42:39.081Z] ----------------------------------------------------------------------
-[debug] [2026-04-08T12:42:39.083Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2026-04-08T12:42:39.083Z] CLI Version:   15.13.0
-[debug] [2026-04-08T12:42:39.083Z] Platform:      win32
-[debug] [2026-04-08T12:42:39.083Z] Node Version:  v22.15.1
-[debug] [2026-04-08T12:42:39.084Z] Time:          Wed Apr 08 2026 14:42:39 GMT+0200 (Ora legale dell’Europa centrale)
-[debug] [2026-04-08T12:42:39.084Z] ----------------------------------------------------------------------
+[debug] [2026-06-04T15:59:42.935Z] ----------------------------------------------------------------------
+[debug] [2026-06-04T15:59:42.936Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-06-04T15:59:42.937Z] CLI Version:   15.13.0
+[debug] [2026-06-04T15:59:42.937Z] Platform:      win32
+[debug] [2026-06-04T15:59:42.937Z] Node Version:  v25.9.0
+[debug] [2026-06-04T15:59:42.937Z] Time:          Thu Jun 04 2026 17:59:42 GMT+0200 (Ora legale dell’Europa centrale)
+[debug] [2026-06-04T15:59:42.937Z] ----------------------------------------------------------------------
 [debug] 
+[debug] [2026-06-04T15:59:42.939Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-06-04T15:59:46.252Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-04T15:59:46.253Z] > authorizing via signed-in user (chicece98@gmail.com)
+[debug] [2026-06-04T15:59:46.253Z] [iam] checking project pitudiet-2d166 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-06-04T15:59:46.253Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.254Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.254Z] > refreshing access token with scopes: []
+[debug] [2026-06-04T15:59:46.254Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-04T15:59:46.255Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-04T15:59:46.261Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"firebase-public.firebaseio.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"firebase-public.firebaseio.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}}}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2026-06-04T15:59:46.262Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2026-06-04T15:59:46.262Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------c5515ba6f35b932615316326","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-04T15:59:46.262Z] [iam] error while checking permissions, command may fail: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-04T15:59:46.263Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.263Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.263Z] > refreshing access token with scopes: []
+[debug] [2026-06-04T15:59:46.263Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-04T15:59:46.264Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-04T15:59:46.266Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------6504c223d7d21e4169a5d5d5","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-04T15:59:46.267Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
 [info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+[info] === Deploying to 'pitudiet-2d166'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-06-04T15:59:46.269Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.269Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T15:59:46.269Z] > refreshing access token with scopes: []
+[debug] [2026-06-04T15:59:46.269Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-04T15:59:46.269Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-04T15:59:46.271Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------948cb4bf25c3728dd9980208","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
 
-You're about to initialize a Firebase project in this directory:
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
 
-  C:\Users\matte
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-04T15:59:46.567Z] Error: EPERM: operation not permitted, open 'C:\Users\matte\.config\configstore\firebase-tools.json.990579642'
+    at Object.openSync (node:fs:556:18)
+    at writeFile.writeFileSync [as sync] (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\write-file-atomic\index.js:205:13)
+    at set all (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\configstore\index.js:61:20)
+    at Configstore.delete (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\configstore\index.js:101:12)
+    at process.<anonymous> (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\cli.js:65:45)
+    at process.emit (node:events:521:24)
+    at process.exit (node:internal/process/per_thread:236:15)
+    at Timeout._onTimeout (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\errorOut.js:20:17)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-06-04T17:20:36.527Z] ----------------------------------------------------------------------
+[debug] [2026-06-04T17:20:36.529Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-06-04T17:20:36.529Z] CLI Version:   15.13.0
+[debug] [2026-06-04T17:20:36.529Z] Platform:      win32
+[debug] [2026-06-04T17:20:36.529Z] Node Version:  v25.9.0
+[debug] [2026-06-04T17:20:36.529Z] Time:          Thu Jun 04 2026 19:20:36 GMT+0200 (Ora legale dell’Europa centrale)
+[debug] [2026-06-04T17:20:36.530Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-06-04T17:20:36.531Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-06-04T17:20:39.221Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-04T17:20:39.222Z] > authorizing via signed-in user (chicece98@gmail.com)
+[debug] [2026-06-04T17:20:39.222Z] [iam] checking project pitudiet-2d166 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-06-04T17:20:39.222Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T17:20:39.222Z] Checked if tokens are valid: false, expires at: 1775655482086
+[debug] [2026-06-04T17:20:39.223Z] > refreshing access token with scopes: []
+[debug] [2026-06-04T17:20:39.223Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-04T17:20:39.223Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-04T17:20:39.555Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-04T17:20:39.555Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-04T17:20:39.561Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions [none]
+[debug] [2026-06-04T17:20:39.561Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions  x-goog-user-project=pitudiet-2d166
+[debug] [2026-06-04T17:20:39.562Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-06-04T17:20:39.637Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-06-04T17:20:39.637Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-06-04T17:20:40.530Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions 200
+[debug] [2026-06-04T17:20:40.530Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-06-04T17:20:40.530Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:40.531Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:40.531Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 [none]
+[debug] [2026-06-04T17:20:41.052Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 200
+[debug] [2026-06-04T17:20:41.052Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 {"projectId":"pitudiet-2d166","projectNumber":"492904065341","displayName":"Pitudiet","name":"projects/pitudiet-2d166","resources":{"hostingSite":"pitudiet-2d166"},"state":"ACTIVE","etag":"1_77262e3e-c0ed-455e-a8aa-035aaf317d0b"}
+[info] 
+[info] === Deploying to 'pitudiet-2d166'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-06-04T17:20:41.055Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:41.055Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:41.055Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions [none]
+[debug] [2026-06-04T17:20:41.055Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-06-04T17:20:45.162Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions 200
+[debug] [2026-06-04T17:20:45.162Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions {"name":"projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[fabiusgym-36605]: beginning deploy... 
+[info] i  hosting[fabiusgym-36605]: found 18 files in dist 
+[debug] [2026-06-04T17:20:45.178Z] [hosting] uploading with 200 concurrency
+[debug] [2026-06-04T17:20:45.178Z] [hosting] hash cache [ZGlzdA] not populated
+[debug] [2026-06-04T17:20:45.265Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.265Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.267Z] [hosting] hash cache [ZGlzdA] stored for 18 files
+[debug] [2026-06-04T17:20:45.267Z] [hosting][hash queue][FINAL] {"max":81,"min":10,"avg":16.444444444444443,"active":0,"complete":18,"success":18,"errored":0,"retried":0,"total":18,"elapsed":88}
+[debug] [2026-06-04T17:20:45.267Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2:populateFiles [none]
+[debug] [2026-06-04T17:20:45.267Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2:populateFiles {"files":{"/_sitemap.html":"2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf","/login.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/view.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/iscritti.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/index.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/alert.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/favicon.ico":"6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37","/modal.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/setting.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/+not-found.html":"2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf","/(tabs)/iscritti.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/(tabs)/index.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/config/firebaseConfig.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/(tabs)/alert.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/(tabs)/setting.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/(auth)/view.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/(auth)/login.html":"e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","/_expo/static/js/web/entry-475f1af1cccae281b486fe2f619bb541.js":"15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23"}}
+[debug] [2026-06-04T17:20:45.974Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2:populateFiles 200
+[debug] [2026-06-04T17:20:45.974Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2:populateFiles {"uploadRequiredHashes":["2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf","e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3","15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23","6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files"}
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:45.975Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf [none]
+[debug] [2026-06-04T17:20:45.975Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf [stream]
+[debug] [2026-06-04T17:20:45.976Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3 [none]
+[debug] [2026-06-04T17:20:45.976Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3 [stream]
+[debug] [2026-06-04T17:20:45.977Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23 [none]
+[debug] [2026-06-04T17:20:45.977Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23 [stream]
+[debug] [2026-06-04T17:20:45.978Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37 [none]
+[debug] [2026-06-04T17:20:45.978Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37 [stream]
+[debug] [2026-06-04T17:20:45.979Z] [hosting][populate queue][FINAL] {"max":710,"min":710,"avg":710,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":714}
+[debug] [2026-06-04T17:20:45.979Z] [hosting] uploads queued: 4
+[debug] [2026-06-04T17:20:47.102Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37 200
+[debug] [2026-06-04T17:20:47.102Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37 [stream]
+[info] i  hosting: uploading new files [1/4] (25%) 
+[debug] [2026-06-04T17:20:47.190Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3 200
+[debug] [2026-06-04T17:20:47.190Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/e98306477a84ba98dc0bd97c073d8fbc1476d9a01a65dddbfeca5fe4d59a2fd3 [stream]
+[debug] [2026-06-04T17:20:47.401Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23 200
+[debug] [2026-06-04T17:20:47.402Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/15d30dd7f264c0fef8d231fca65c1277aa4dc5d3e1cf7ce2eaefd63b1a2abe23 [stream]
+[debug] [2026-06-04T17:20:47.492Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf 200
+[debug] [2026-06-04T17:20:47.492Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/d1154b566a9cb8e2/files/2c3ac2b4ebc75bcb7987863ab7f013a11490255f32f920f5407995cdc4df0daf [stream]
+[debug] [2026-06-04T17:20:47.492Z] [hosting][upload queue][FINAL] {"max":1518,"min":1128,"avg":1322,"active":0,"complete":4,"success":4,"errored":0,"retried":0,"total":4,"elapsed":1518}
+[info] i  hosting: upload complete 
+[info] +  hosting[fabiusgym-36605]: file upload complete 
+[debug] [2026-06-04T17:20:47.493Z] [hosting] deploy completed after 2329ms
+[debug] [2026-06-04T17:20:47.493Z] [
+  {
+    "config": {
+      "site": "fabiusgym-36605",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "version": "projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2"
+  }
+]
+[info] i  hosting[fabiusgym-36605]: finalizing version... 
+[debug] [2026-06-04T17:20:47.494Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:47.495Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:47.495Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/d1154b566a9cb8e2 updateMask=status%2Cconfig
+[debug] [2026-06-04T17:20:47.495Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/d1154b566a9cb8e2 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-06-04T17:20:48.917Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/d1154b566a9cb8e2 200
+[debug] [2026-06-04T17:20:48.917Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/d1154b566a9cb8e2 {"name":"projects/717899273364/sites/fabiusgym-36605/versions/d1154b566a9cb8e2","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-06-04T17:20:43.071078Z","createUser":{"email":"chicece98@gmail.com"},"finalizeTime":"2026-06-04T17:20:49.134243Z","finalizeUser":{"email":"chicece98@gmail.com"}}
+[debug] [2026-06-04T17:20:48.917Z] [hosting] finalized version for fabiusgym-36605:[object Object]
+[info] +  hosting[fabiusgym-36605]: version finalized 
+[info] i  hosting[fabiusgym-36605]: releasing new version... 
+[debug] [2026-06-04T17:20:48.917Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:48.917Z] Checked if tokens are valid: true, expires at: 1780597238555
+[debug] [2026-06-04T17:20:48.917Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases versionName=projects%2F717899273364%2Fsites%2Ffabiusgym-36605%2Fversions%2Fd1154b566a9cb8e2
+[debug] [2026-06-04T17:20:48.917Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases {}
+[debug] [2026-06-04T17:20:50.062Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases 200
+[debug] [2026-06-05T08:34:21.411Z] ----------------------------------------------------------------------
+[debug] [2026-06-05T08:34:21.413Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-06-05T08:34:21.414Z] CLI Version:   15.13.0
+[debug] [2026-06-05T08:34:21.414Z] Platform:      win32
+[debug] [2026-06-05T08:34:21.414Z] Node Version:  v25.9.0
+[debug] [2026-06-05T08:34:21.414Z] Time:          Fri Jun 05 2026 10:34:21 GMT+0200 (Ora legale dell’Europa centrale)
+[debug] [2026-06-05T08:34:21.414Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-06-05T08:34:24.166Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T08:34:24.167Z] > authorizing via signed-in user (chicece98@gmail.com)
+[debug] [2026-06-05T08:34:24.167Z] [iam] checking project pitudiet-2d166 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-06-05T08:34:24.169Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.170Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.170Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T08:34:24.172Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T08:34:24.173Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T08:34:24.203Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------72738c85a790c7133b5a2e54","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
 
-Before we get started, keep in mind:
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-05T08:34:24.204Z] [iam] error while checking permissions, command may fail: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
 
-  * You are initializing within an existing Firebase project directory
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-05T08:34:24.205Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.205Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.205Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T08:34:24.205Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T08:34:24.205Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T08:34:24.208Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------01cad22707cefb43b5032ba0","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
 
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-05T08:34:24.209Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[info] 
+[info] === Deploying to 'pitudiet-2d166'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-06-05T08:34:24.212Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.212Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:24.212Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T08:34:24.212Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T08:34:24.212Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T08:34:24.214Z] *** [apiv2] error from fetch(https://www.googleapis.com/oauth2/v3/token, {"headers":{},"method":"POST","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://127.0.0.1:9",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"www.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"proxy":"http://127.0.0.1:9/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"127.0.0.1","port":9}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"defaultPort":80,"protocol":"http:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000},"httpsAgent":{"_events":{},"_eventsCount":2,"options":{"defaultPort":443,"protocol":"https:","noDelay":true,"path":null},"defaultPort":443,"protocol":"https:","requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"agentKeepAliveTimeoutBuffer":1000,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"body":{"_overheadLength":545,"_valueLength":212,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------08937fffb6546d4870456ee5","_events":{},"_eventsCount":1}}): FetchError: request to https://www.googleapis.com/oauth2/v3/token failed, reason: connect ECONNREFUSED 127.0.0.1:9
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-06-05T08:34:24.509Z] Error: EPERM: operation not permitted, open 'C:\Users\matte\.config\configstore\firebase-tools.json.2942085603'
+    at Object.openSync (node:fs:556:18)
+    at writeFile.writeFileSync [as sync] (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\write-file-atomic\index.js:205:13)
+    at set all (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\configstore\index.js:61:20)
+    at Configstore.delete (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\configstore\index.js:101:12)
+    at process.<anonymous> (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\cli.js:65:45)
+    at process.emit (node:events:521:24)
+    at process.exit (node:internal/process/per_thread:236:15)
+    at Timeout._onTimeout (C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\errorOut.js:20:17)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-06-05T08:34:52.135Z] ----------------------------------------------------------------------
+[debug] [2026-06-05T08:34:52.137Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-06-05T08:34:52.137Z] CLI Version:   15.13.0
+[debug] [2026-06-05T08:34:52.137Z] Platform:      win32
+[debug] [2026-06-05T08:34:52.137Z] Node Version:  v25.9.0
+[debug] [2026-06-05T08:34:52.137Z] Time:          Fri Jun 05 2026 10:34:52 GMT+0200 (Ora legale dell’Europa centrale)
+[debug] [2026-06-05T08:34:52.137Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-06-05T08:34:53.284Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T08:34:53.285Z] > authorizing via signed-in user (chicece98@gmail.com)
+[debug] [2026-06-05T08:34:53.285Z] [iam] checking project pitudiet-2d166 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-06-05T08:34:53.286Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:53.287Z] Checked if tokens are valid: false, expires at: 1780597238555
+[debug] [2026-06-05T08:34:53.287Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T08:34:53.289Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T08:34:53.289Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T08:34:53.633Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-05T08:34:53.633Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T08:34:53.640Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions [none]
+[debug] [2026-06-05T08:34:53.640Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions  x-goog-user-project=pitudiet-2d166
+[debug] [2026-06-05T08:34:53.640Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-06-05T08:34:54.085Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions 200
+[debug] [2026-06-05T08:34:54.085Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pitudiet-2d166:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-06-05T08:34:54.086Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:54.086Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:54.086Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 [none]
+[debug] [2026-06-05T08:34:54.656Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 200
+[debug] [2026-06-05T08:34:54.656Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/pitudiet-2d166 {"projectId":"pitudiet-2d166","projectNumber":"492904065341","displayName":"Pitudiet","name":"projects/pitudiet-2d166","resources":{"hostingSite":"pitudiet-2d166"},"state":"ACTIVE","etag":"1_77262e3e-c0ed-455e-a8aa-035aaf317d0b"}
+[info] 
+[info] === Deploying to 'pitudiet-2d166'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-06-05T08:34:54.659Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:54.659Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:54.659Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions [none]
+[debug] [2026-06-05T08:34:54.659Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-06-05T08:34:57.034Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions 200
+[debug] [2026-06-05T08:34:57.034Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions {"name":"projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[fabiusgym-36605]: beginning deploy... 
+[info] i  hosting[fabiusgym-36605]: found 18 files in dist 
+[debug] [2026-06-05T08:34:57.049Z] [hosting] uploading with 200 concurrency
+[debug] [2026-06-05T08:34:57.145Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:57.146Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:57.147Z] [hosting] hash cache [ZGlzdA] stored for 18 files
+[debug] [2026-06-05T08:34:57.147Z] [hosting][hash queue][FINAL] {"max":92,"min":6,"avg":11.61111111111111,"active":0,"complete":18,"success":18,"errored":0,"retried":0,"total":18,"elapsed":97}
+[debug] [2026-06-05T08:34:57.147Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d:populateFiles [none]
+[debug] [2026-06-05T08:34:57.148Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d:populateFiles {"files":{"/_sitemap.html":"abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9","/view.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/setting.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/modal.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/index.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/login.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/alert.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/iscritti.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/+not-found.html":"abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9","/favicon.ico":"6ddab5ba4d0e73bc47d12e5e99db8fc49bd24eee5d9af12047f09a782236cb37","/(tabs)/setting.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/config/firebaseConfig.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/(tabs)/iscritti.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/(auth)/view.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/(auth)/login.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/(tabs)/index.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/(tabs)/alert.html":"9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","/_expo/static/js/web/entry-baed81dfe91b9e6bbd2350c21739e615.js":"a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae"}}
+[debug] [2026-06-05T08:34:58.293Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d:populateFiles 200
+[debug] [2026-06-05T08:34:58.293Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d:populateFiles {"uploadRequiredHashes":["abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9","9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7","a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files"}
+[debug] [2026-06-05T08:34:58.294Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.294Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.294Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.294Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.295Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.295Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:58.295Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9 [none]
+[debug] [2026-06-05T08:34:58.295Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9 [stream]
+[debug] [2026-06-05T08:34:58.296Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7 [none]
+[debug] [2026-06-05T08:34:58.296Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7 [stream]
+[debug] [2026-06-05T08:34:58.298Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae [none]
+[debug] [2026-06-05T08:34:58.298Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae [stream]
+[debug] [2026-06-05T08:34:58.299Z] [hosting][populate queue][FINAL] {"max":1150,"min":1150,"avg":1150,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1154}
+[debug] [2026-06-05T08:34:58.299Z] [hosting] uploads queued: 3
+[info] i  hosting: uploading new files [0/3] (0%) 
+[debug] [2026-06-05T08:34:59.378Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9 200
+[debug] [2026-06-05T08:34:59.378Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/abd9728a0812a48e3e67fb3a59002dc6db9e5a034fd57a819f43bf36cfd6d0d9 [stream]
+[debug] [2026-06-05T08:34:59.455Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7 200
+[debug] [2026-06-05T08:34:59.455Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/9fb152e62a17635c139a1f1dfc619d9db7a0d3f783072c19c0ff7a6017a468d7 [stream]
+[debug] [2026-06-05T08:34:59.884Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae 200
+[debug] [2026-06-05T08:34:59.885Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fabiusgym-36605/versions/c9e6a9d089e8316d/files/a57f8c6d74c7e9799ef10a77cc57cc172b2e0d0a63686fe41cf94987ff7618ae [stream]
+[debug] [2026-06-05T08:34:59.885Z] [hosting][upload queue][FINAL] {"max":1591,"min":1084,"avg":1278.6666666666667,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":1591}
+[info] i  hosting: upload complete 
+[info] +  hosting[fabiusgym-36605]: file upload complete 
+[debug] [2026-06-05T08:34:59.885Z] [hosting] deploy completed after 2849ms
+[debug] [2026-06-05T08:34:59.885Z] [
+  {
+    "config": {
+      "site": "fabiusgym-36605",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "version": "projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d"
+  }
+]
+[info] i  hosting[fabiusgym-36605]: finalizing version... 
+[debug] [2026-06-05T08:34:59.886Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:59.886Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:34:59.886Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/c9e6a9d089e8316d updateMask=status%2Cconfig
+[debug] [2026-06-05T08:34:59.886Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/c9e6a9d089e8316d {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-06-05T08:35:01.253Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/c9e6a9d089e8316d 200
+[debug] [2026-06-05T08:35:01.253Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/versions/c9e6a9d089e8316d {"name":"projects/717899273364/sites/fabiusgym-36605/versions/c9e6a9d089e8316d","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-06-05T08:34:56.133520Z","createUser":{"email":"chicece98@gmail.com"},"finalizeTime":"2026-06-05T08:35:01.644653Z","finalizeUser":{"email":"chicece98@gmail.com"}}
+[debug] [2026-06-05T08:35:01.253Z] [hosting] finalized version for fabiusgym-36605:[object Object]
+[info] +  hosting[fabiusgym-36605]: version finalized 
+[info] i  hosting[fabiusgym-36605]: releasing new version... 
+[debug] [2026-06-05T08:35:01.253Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:35:01.253Z] Checked if tokens are valid: true, expires at: 1780652092634
+[debug] [2026-06-05T08:35:01.253Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases versionName=projects%2F717899273364%2Fsites%2Ffabiusgym-36605%2Fversions%2Fc9e6a9d089e8316d
+[debug] [2026-06-05T08:35:01.253Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases {}
+[debug] [2026-06-05T08:35:02.631Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fabiusgym-36605/channels/live/releases 200
