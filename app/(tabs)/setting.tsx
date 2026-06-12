@@ -17,6 +17,7 @@ interface SocioIngresso {
   uscita?: {
     toDate?: () => Date;
   };
+  uscitaByAdmin?: boolean;
 }
 
 type FasciaStorico = 'mattina' | 'pomeriggio';
@@ -91,6 +92,10 @@ const formattaOrario = (timestamp?: { toDate?: () => Date }) => (
   timestamp?.toDate
     ? timestamp.toDate().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
     : '--:--'
+);
+
+const formattaUscita = (socio: SocioIngresso) => (
+  socio.uscitaByAdmin ? 'By Admin' : formattaOrario(socio.uscita)
 );
 
 export default function SettingsScreen() {
@@ -269,7 +274,9 @@ const formattaDataBella = (dataString: string) => {
               </View>
               <View style={styles.timeBox}>
                 <Text style={styles.itemTextTime}>In {formattaOrario(socio.ingresso)}</Text>
-                <Text style={styles.itemTextExit}>Out {formattaOrario(socio.uscita)}</Text>
+                <Text style={styles.itemTextExit}>
+                  {socio.uscitaByAdmin ? 'OUT: By Admin' : `Out ${formattaUscita(socio)}`}
+                </Text>
               </View>
             </View>
           ))

@@ -2,18 +2,30 @@ import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { getDatabase, onValue, ref, set } from "firebase/database";
 import {
+  addDoc,
   collection,
+  deleteDoc,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
   runTransaction,
   serverTimestamp,
+  updateDoc,
   where,
   writeBatch,
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { db } from "../config/firebaseConfig";
 
 // --- 1. FUNZIONI DI LOGICA (Fuori dal componente HomeScreen) ---
@@ -153,6 +165,13 @@ type NotificaAccesso = {
   messaggio: string;
   tipo: TipoNotifica;
 };
+type Appunto = {
+  id: string;
+  testo: string;
+  risolto?: boolean;
+  creato_ms?: number;
+  aggiornato_ms?: number;
+};
 type TipoAccessoRegistrato = "ingresso" | "uscita";
 type RisultatoAccessoSocio = {
   nome?: string;
@@ -166,6 +185,18 @@ const toNumeroSicuro = (valore: unknown) => {
   return Number.isFinite(numero) ? numero : 0;
 };
 
+const calcolaRecuperoMassimoDaFrequenzaBase = (frequenzaBase: number) => {
+  if (frequenzaBase >= 5) {
+    return 0;
+  }
+
+  if (frequenzaBase === 4) {
+    return 1;
+  }
+
+  return Math.max(GIORNI_APERTURA_SETTIMANALI - frequenzaBase, 0);
+};
+
 const calcolaFrequenzaConRecuperiLimitati = (
   frequenza: unknown,
   recupero: unknown,
@@ -176,10 +207,7 @@ const calcolaFrequenzaConRecuperiLimitati = (
     Math.max(frequenzaSettimanale - recuperoGg, 0),
     GIORNI_APERTURA_SETTIMANALI,
   );
-  const recuperoMassimo = Math.max(
-    GIORNI_APERTURA_SETTIMANALI - frequenzaBase,
-    0,
-  );
+  const recuperoMassimo = calcolaRecuperoMassimoDaFrequenzaBase(frequenzaBase);
   const recuperoLimitato = Math.min(Math.max(recuperoGg, 0), recuperoMassimo);
 
   return {
@@ -189,6 +217,51 @@ const calcolaFrequenzaConRecuperiLimitati = (
     frequenzaTotale: frequenzaBase + recuperoLimitato,
   };
 };
+
+const getIngressoDate = (accesso: any) => {
+  if (accesso?.ingresso?.toDate) {
+    return accesso.ingresso.toDate();
+  }
+
+  const ingressoMs = Number(accesso?.ingresso_ms) || 0;
+  return ingressoMs ? new Date(ingressoMs) : null;
+};
+
+const getScadenzaFasciaUscitaMs = (accesso: any) => {
+  const dataIngresso = getIngressoDate(accesso);
+
+  if (!dataIngresso) {
+    return 0;
+  }
+
+  const minutiIngresso =
+    dataIngresso.getHours() * 60 + dataIngresso.getMinutes();
+  const scadenza = new Date(dataIngresso);
+
+  if (minutiIngresso >= 10 * 60 && minutiIngresso <= 14 * 60) {
+    scadenza.setHours(14, 0, 0, 0);
+    return scadenza.getTime();
+  }
+
+  if (minutiIngresso >= 16 * 60 && minutiIngresso <= 23 * 60) {
+    scadenza.setHours(23, 0, 0, 0);
+    return scadenza.getTime();
+  }
+
+  return 0;
+};
+
+const isUscitaNonTimbrataScaduta = (accesso: any, oraCorrenteMs: number) => {
+  if (accessoRisultaUscito(accesso)) {
+    return false;
+  }
+
+  const scadenzaFasciaMs = getScadenzaFasciaUscitaMs(accesso);
+  return !!scadenzaFasciaMs && oraCorrenteMs > scadenzaFasciaMs;
+};
+
+const getAppuntoMs = (appunto: Appunto) =>
+  appunto.aggiornato_ms || appunto.creato_ms || 0;
 
 const eseguiResetRecuperiSettimanali = async () => {
   const oggi = getOggiFormatoIT();
@@ -229,10 +302,9 @@ const eseguiResetRecuperiSettimanali = async () => {
     const recupero_gg = dati.recupero || 0;
     const { frequenzaBase, recuperoMassimo } =
       calcolaFrequenzaConRecuperiLimitati(frequenza_settimanale, recupero_gg);
-    const recuperoDaAttribuire = Math.min(
-      Math.max(frequenzaBase - calcolo_frequenza, 0),
-      recuperoMassimo,
-    );
+    const recuperiMaturati =
+      calcolo_frequenza > 0 ? Math.max(frequenzaBase - calcolo_frequenza, 0) : 0;
+    const recuperoDaAttribuire = Math.min(recuperiMaturati, recuperoMassimo);
 
     batch.update(socioDoc.ref, {
       calc_frequenza: 0,
@@ -256,6 +328,113 @@ const eseguiResetRecuperiSettimanali = async () => {
   }
 
   return { sociAggiornati, sociGiaAggiornati, sociMeseScaduto };
+};
+
+const chiudiUsciteNonTimbrateByAdmin = async (socioId?: string) => {
+  const oggi = getOggiFormatoIT();
+  const oraUscita = Date.now();
+  const accessiTrovati = new Map<string, { ref: any; dati: any }>();
+
+  const aggiungiAccesso = (accessoDoc: any) => {
+    accessiTrovati.set(accessoDoc.ref.path, {
+      ref: accessoDoc.ref,
+      dati: { id: accessoDoc.id, ...accessoDoc.data() },
+    });
+  };
+
+  await Promise.all(
+    getPercorsiData(oggi).map(async (percorso) => {
+      const ingressiRef = collection(
+        db,
+        "accessi",
+        percorso.anno,
+        percorso.mese,
+        percorso.giorno,
+        "ingressi_del_giorno",
+      );
+
+      if (socioId) {
+        const ingressoDirettoRef = doc(ingressiRef, socioId);
+        const [ingressoDirettoSnapshot, ingressiSocioSnapshot] =
+          await Promise.all([
+            getDoc(ingressoDirettoRef),
+            getDocs(query(ingressiRef, where("socioId", "==", socioId))),
+          ]);
+
+        if (ingressoDirettoSnapshot.exists()) {
+          aggiungiAccesso(ingressoDirettoSnapshot);
+        }
+
+        ingressiSocioSnapshot.docs.forEach(aggiungiAccesso);
+        return;
+      }
+
+      const snapshot = await getDocs(ingressiRef);
+      snapshot.docs.forEach(aggiungiAccesso);
+    }),
+  );
+
+  const accessiDaChiudere = Array.from(accessiTrovati.values()).filter(
+    ({ dati }) => {
+      const idSocio = String(dati.socioId || dati.id || "");
+
+      return (
+        (!socioId || idSocio === socioId) &&
+        !isCardResetRecuperi(String(dati.cardId || "")) &&
+        isUscitaNonTimbrataScaduta(dati, oraUscita)
+      );
+    },
+  );
+
+  if (accessiDaChiudere.length === 0) {
+    return { usciteChiuse: 0, sociCoinvolti: 0 };
+  }
+
+  let batch = writeBatch(db);
+  let operazioniBatch = 0;
+  const sociCoinvolti = new Set<string>();
+
+  const commitSeNecessario = async () => {
+    if (operazioniBatch >= 450) {
+      await batch.commit();
+      batch = writeBatch(db);
+      operazioniBatch = 0;
+    }
+  };
+
+  for (const { ref: ingressoRef, dati } of accessiDaChiudere) {
+    const idSocio = String(dati.socioId || socioId || "");
+
+    batch.update(ingressoRef, {
+      uscita: serverTimestamp(),
+      uscita_ms: oraUscita,
+      stato: "uscito",
+      uscitaManuale: true,
+      uscitaByAdmin: true,
+    });
+    operazioniBatch += 1;
+
+    if (idSocio) {
+      sociCoinvolti.add(idSocio);
+      batch.update(doc(db, "soci", idSocio), {
+        ultimo_giorno_uscita: oggi,
+        ultimo_uscita_ms: oraUscita,
+        ultimo_ingresso_ms: oraUscita,
+      });
+      operazioniBatch += 1;
+    }
+
+    await commitSeNecessario();
+  }
+
+  if (operazioniBatch > 0) {
+    await batch.commit();
+  }
+
+  return {
+    usciteChiuse: accessiDaChiudere.length,
+    sociCoinvolti: sociCoinvolti.size,
+  };
 };
 
 const registraIngressoSocio = async (
@@ -598,11 +777,23 @@ export default function HomeScreen() {
   const isFocused = useIsFocused();
   const [numeroIscritti, setNumeroIscritti] = useState(0);
   const [ingressiOggi, setIngressiOggi] = useState<any[]>([]);
+  const [appunti, setAppunti] = useState<Appunto[]>([]);
+  const [appuntiVisibili, setAppuntiVisibili] = useState(false);
+  const [testoAppunto, setTestoAppunto] = useState("");
+  const [appuntoInModifica, setAppuntoInModifica] = useState<Appunto | null>(
+    null,
+  );
+  const [salvataggioAppunto, setSalvataggioAppunto] = useState(false);
+  const [uscitaInValidazione, setUscitaInValidazione] = useState<string | null>(
+    null,
+  );
+  const [oraCorrenteMs, setOraCorrenteMs] = useState(Date.now());
   const [notificaAccesso, setNotificaAccesso] =
     useState<NotificaAccesso | null>(null);
   const [giornoCorrente, setGiornoCorrente] = useState(getOggiFormatoIT());
   const lastProcessedScan = useRef({ cardId: "", time: 0 });
   const notificaTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const appuntiAperti = appunti.filter((appunto) => !appunto.risolto);
 
   const mostraNotifica = useCallback(
     (titolo: string, messaggio: string, tipo: TipoNotifica) => {
@@ -630,6 +821,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const aggiornaGiornoCorrente = () => {
       setGiornoCorrente(getOggiFormatoIT());
+      setOraCorrenteMs(Date.now());
     };
 
     aggiornaGiornoCorrente();
@@ -644,6 +836,139 @@ export default function HomeScreen() {
       setNumeroIscritti(snap.size),
     );
   }, []);
+
+  useEffect(() => {
+    return onSnapshot(
+      collection(db, "appunti"),
+      (snap) => {
+        const prossimiAppunti = snap.docs
+          .map((appuntoDoc) => ({
+            id: appuntoDoc.id,
+            ...(appuntoDoc.data() as Omit<Appunto, "id">),
+          }))
+          .sort((a, b) => {
+            if (!!a.risolto !== !!b.risolto) {
+              return a.risolto ? 1 : -1;
+            }
+
+            return getAppuntoMs(b) - getAppuntoMs(a);
+          });
+
+        setAppunti(prossimiAppunti);
+      },
+      (error) => {
+        console.error("Errore onSnapshot appunti:", error);
+      },
+    );
+  }, []);
+
+  const resetFormAppunto = () => {
+    setTestoAppunto("");
+    setAppuntoInModifica(null);
+  };
+
+  const salvaAppunto = async () => {
+    const testoPulito = testoAppunto.trim();
+
+    if (!testoPulito) {
+      mostraNotifica("Appunto vuoto", "Scrivi qualcosa prima di salvare.", "warning");
+      return;
+    }
+
+    setSalvataggioAppunto(true);
+
+    try {
+      if (appuntoInModifica) {
+        await updateDoc(doc(db, "appunti", appuntoInModifica.id), {
+          testo: testoPulito,
+          aggiornato: serverTimestamp(),
+          aggiornato_ms: Date.now(),
+        });
+      } else {
+        await addDoc(collection(db, "appunti"), {
+          testo: testoPulito,
+          risolto: false,
+          creato: serverTimestamp(),
+          creato_ms: Date.now(),
+          aggiornato: serverTimestamp(),
+          aggiornato_ms: Date.now(),
+        });
+      }
+
+      resetFormAppunto();
+    } catch (error) {
+      console.error("Errore salvataggio appunto:", error);
+      mostraNotifica("Errore", "Appunto non salvato.", "error");
+    } finally {
+      setSalvataggioAppunto(false);
+    }
+  };
+
+  const modificaAppunto = (appunto: Appunto) => {
+    setAppuntoInModifica(appunto);
+    setTestoAppunto(appunto.testo || "");
+  };
+
+  const cambiaStatoAppunto = async (appunto: Appunto) => {
+    try {
+      await updateDoc(doc(db, "appunti", appunto.id), {
+        risolto: !appunto.risolto,
+        aggiornato: serverTimestamp(),
+        aggiornato_ms: Date.now(),
+      });
+    } catch (error) {
+      console.error("Errore stato appunto:", error);
+      mostraNotifica("Errore", "Appunto non aggiornato.", "error");
+    }
+  };
+
+  const eliminaAppunto = async (appunto: Appunto) => {
+    try {
+      await deleteDoc(doc(db, "appunti", appunto.id));
+
+      if (appuntoInModifica?.id === appunto.id) {
+        resetFormAppunto();
+      }
+    } catch (error) {
+      console.error("Errore eliminazione appunto:", error);
+      mostraNotifica("Errore", "Appunto non eliminato.", "error");
+    }
+  };
+
+  const validaUscitaByAdmin = async (item: any) => {
+    const socioId = String(item.socioId || item.id || "");
+
+    if (!socioId) {
+      mostraNotifica("Errore", "Socio non riconosciuto.", "error");
+      return;
+    }
+
+    setUscitaInValidazione(socioId);
+
+    try {
+      const risultato = await chiudiUsciteNonTimbrateByAdmin(socioId);
+
+      if (risultato.usciteChiuse === 0) {
+        mostraNotifica(
+          "Uscita non registrata",
+          "Non ci sono uscite scadute da validare.",
+          "warning",
+        );
+        return;
+      }
+
+      mostraNotifica(
+        "Uscita validata",
+        `${item.nome || ""} ${item.cognome || ""} - By Admin`,
+        "success",
+      );
+    } catch (error) {
+      console.error("Errore uscita By Admin:", error);
+      mostraNotifica("Errore", "Uscita non validata.", "error");
+    } finally {
+      setUscitaInValidazione(null);
+    }
+  };
 
   // Listener Ingressi del Giorno (Lista)
   // Listener Ingressi del Giorno con FILTRO DOPPIONI
@@ -741,9 +1066,10 @@ export default function HomeScreen() {
         await set(scanRef, null); // Reset immediato scanner
         if (isCardResetRecuperi(cardIdPulita)) {
           const risultato = await eseguiResetRecuperiSettimanali();
+          const usciteByAdmin = await chiudiUsciteNonTimbrateByAdmin();
           mostraNotifica(
             "Reset completato",
-            `Soci aggiornati: ${risultato.sociAggiornati}. Gia aggiornati oggi: ${risultato.sociGiaAggiornati}. Mesi scaduti rilevati: ${risultato.sociMeseScaduto}.`,
+            `Soci aggiornati: ${risultato.sociAggiornati}. Gia aggiornati oggi: ${risultato.sociGiaAggiornati}. Uscite By Admin: ${usciteByAdmin.usciteChiuse}. Mesi scaduti rilevati: ${risultato.sociMeseScaduto}.`,
             "success",
           );
           return;
@@ -808,6 +1134,18 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Text style={styles.text}>GymFabius 💪</Text>
         <Text style={styles.textSub}>Gestione Ingressi</Text>
+        <TouchableOpacity
+          style={styles.notesButton}
+          onPress={() => setAppuntiVisibili(true)}
+        >
+          <Ionicons name="document-text-outline" size={18} color="#e7bc83" />
+          <Text style={styles.notesButtonText}>Appunti</Text>
+          {appuntiAperti.length > 0 && (
+            <View style={styles.notesBadge}>
+              <Text style={styles.notesBadgeText}>{appuntiAperti.length}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
 
       {notificaAccesso && (
@@ -823,6 +1161,124 @@ export default function HomeScreen() {
           <Text style={styles.noticeText}>{notificaAccesso.messaggio}</Text>
         </View>
       )}
+
+      <Modal
+        visible={appuntiVisibili}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setAppuntiVisibili(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.notesModal}>
+            <View style={styles.notesHeader}>
+              <Text style={styles.notesTitle}>Appunti</Text>
+              <TouchableOpacity
+                style={styles.notesCloseButton}
+                onPress={() => {
+                  setAppuntiVisibili(false);
+                  resetFormAppunto();
+                }}
+              >
+                <Ionicons name="close" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            <TextInput
+              style={styles.notesInput}
+              placeholder="Scrivi un appunto..."
+              placeholderTextColor="#777"
+              value={testoAppunto}
+              onChangeText={setTestoAppunto}
+              multiline
+            />
+
+            <View style={styles.notesActions}>
+              <TouchableOpacity
+                style={[
+                  styles.notesSaveButton,
+                  salvataggioAppunto && styles.notesButtonDisabled,
+                ]}
+                onPress={salvaAppunto}
+                disabled={salvataggioAppunto}
+              >
+                <Text style={styles.notesSaveText}>
+                  {appuntoInModifica ? "Salva modifica" : "Aggiungi"}
+                </Text>
+              </TouchableOpacity>
+              {appuntoInModifica && (
+                <TouchableOpacity
+                  style={styles.notesCancelButton}
+                  onPress={resetFormAppunto}
+                >
+                  <Text style={styles.notesCancelText}>Annulla</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <ScrollView
+              style={styles.notesList}
+              showsVerticalScrollIndicator={false}
+            >
+              {appunti.length === 0 ? (
+                <Text style={styles.notesEmpty}>Nessun appunto.</Text>
+              ) : (
+                appunti.map((appunto) => (
+                  <View
+                    key={appunto.id}
+                    style={[
+                      styles.noteRow,
+                      appunto.risolto && styles.noteRowDone,
+                    ]}
+                  >
+                    <TouchableOpacity
+                      style={styles.noteStatusButton}
+                      onPress={() => cambiaStatoAppunto(appunto)}
+                    >
+                      <Ionicons
+                        name={
+                          appunto.risolto
+                            ? "checkmark-circle"
+                            : "ellipse-outline"
+                        }
+                        size={22}
+                        color={appunto.risolto ? "#459E7B" : "#e7bc83"}
+                      />
+                    </TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.noteText,
+                        appunto.risolto && styles.noteTextDone,
+                      ]}
+                    >
+                      {appunto.testo}
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.noteIconButton}
+                      onPress={() => modificaAppunto(appunto)}
+                    >
+                      <Ionicons
+                        name="create-outline"
+                        size={19}
+                        color="#64def3"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.noteIconButton}
+                      onPress={() => eliminaAppunto(appunto)}
+                    >
+                      <Ionicons
+                        name="trash-outline"
+                        size={19}
+                        color="#ff7b8a"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))
+              )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.infoContainer}>
         <View style={styles.blocco}>
@@ -845,28 +1301,66 @@ export default function HomeScreen() {
           <Text style={styles.listTitle}>Presenti</Text>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {ingressiOggi.map((item) => (
-            <View key={item.id} style={styles.itemRow}>
-              <Ionicons
-                name="person-circle-outline"
-                size={24}
-                color="#64def3"
-              />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={styles.itemText}>
-                  {item.nome} {item.cognome}
-                </Text>
+          {ingressiOggi.map((item) => {
+            const uscitaNonTimbrata = isUscitaNonTimbrataScaduta(
+              item,
+              oraCorrenteMs,
+            );
+            const socioId = String(item.socioId || item.id || "");
+
+            return (
+              <View
+                key={item.id}
+                style={[
+                  styles.itemRow,
+                  uscitaNonTimbrata && styles.itemRowLateExit,
+                ]}
+              >
+                <Ionicons
+                  name="person-circle-outline"
+                  size={24}
+                  color={uscitaNonTimbrata ? "#ff5c7a" : "#64def3"}
+                />
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                  <Text
+                    style={[
+                      styles.itemText,
+                      uscitaNonTimbrata && styles.itemTextLateExit,
+                    ]}
+                  >
+                    {item.nome} {item.cognome}
+                    {uscitaNonTimbrata ? " (uscita non timbrata)" : ""}
+                  </Text>
+                </View>
+                {uscitaNonTimbrata ? (
+                  <TouchableOpacity
+                    style={[
+                      styles.adminExitButton,
+                      uscitaInValidazione === socioId &&
+                        styles.adminExitButtonDisabled,
+                    ]}
+                    onPress={() => validaUscitaByAdmin(item)}
+                    disabled={uscitaInValidazione === socioId}
+                  >
+                    <Text style={styles.adminExitButtonText}>
+                      {uscitaInValidazione === socioId
+                        ? "Valido..."
+                        : "Valida uscita"}
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text style={styles.itemTextTime}>
+                    {item.ingresso
+                      ?.toDate()
+                      .toLocaleTimeString("it-IT", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                  </Text>
+                )}
               </View>
-              <Text style={styles.itemTextTime}>
-                {item.ingresso
-                  ?.toDate()
-                  .toLocaleTimeString("it-IT", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-              </Text>
-            </View>
-          ))}
+            );
+          })}
         </ScrollView>
       </View>
     </View>
@@ -885,6 +1379,27 @@ const styles = StyleSheet.create({
   header: { alignItems: "center", marginBottom: 30 },
   text: { fontSize: 24, fontWeight: "bold", color: "#fff" },
   textSub: { fontSize: 16, color: "#aaa", marginTop: 5 },
+  notesButton: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1A1C24",
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    gap: 7,
+  },
+  notesButtonText: { color: "#fff", fontSize: 13, fontWeight: "800" },
+  notesBadge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#ff5c7a",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 5,
+  },
+  notesBadgeText: { color: "#fff", fontSize: 11, fontWeight: "900" },
   notice: {
     width: "92%",
     borderLeftWidth: 4,
@@ -902,6 +1417,94 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   noticeText: { color: "#ddd", fontSize: 14 },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.78)",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 18,
+  },
+  notesModal: {
+    width: "100%",
+    maxWidth: 520,
+    maxHeight: "82%",
+    backgroundColor: "#1A1C24",
+    borderRadius: 18,
+    padding: 18,
+  },
+  notesHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 14,
+  },
+  notesTitle: { color: "#fff", fontSize: 21, fontWeight: "900" },
+  notesCloseButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: "#252833",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  notesInput: {
+    minHeight: 82,
+    maxHeight: 130,
+    backgroundColor: "#252833",
+    borderRadius: 12,
+    color: "#fff",
+    padding: 12,
+    textAlignVertical: "top",
+    fontSize: 15,
+  },
+  notesActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 12,
+  },
+  notesSaveButton: {
+    flex: 1,
+    backgroundColor: "#459E7B",
+    borderRadius: 10,
+    alignItems: "center",
+    paddingVertical: 12,
+  },
+  notesButtonDisabled: { opacity: 0.6 },
+  notesSaveText: { color: "#fff", fontWeight: "900" },
+  notesCancelButton: {
+    backgroundColor: "#333",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  notesCancelText: { color: "#fff", fontWeight: "800" },
+  notesList: { marginTop: 14 },
+  notesEmpty: { color: "#aaa", textAlign: "center", paddingVertical: 18 },
+  noteRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#252833",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+  },
+  noteRowDone: { opacity: 0.62 },
+  noteStatusButton: { marginRight: 10 },
+  noteText: {
+    flex: 1,
+    color: "#fff",
+    fontSize: 14,
+    lineHeight: 19,
+  },
+  noteTextDone: { color: "#aaa", textDecorationLine: "line-through" },
+  noteIconButton: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 4,
+  },
   infoContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -942,6 +1545,21 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 12,
   },
+  itemRowLateExit: {
+    backgroundColor: "#3a1d24",
+    borderWidth: 1,
+    borderColor: "#ff5c7a",
+  },
   itemText: { color: "#fff", fontSize: 16 },
+  itemTextLateExit: { color: "#ff8a9b", fontWeight: "900" },
   itemTextTime: { color: "#aaa", fontSize: 14 },
+  adminExitButton: {
+    backgroundColor: "#ff5c7a",
+    borderRadius: 9,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginLeft: 8,
+  },
+  adminExitButtonDisabled: { opacity: 0.6 },
+  adminExitButtonText: { color: "#fff", fontSize: 12, fontWeight: "900" },
 });

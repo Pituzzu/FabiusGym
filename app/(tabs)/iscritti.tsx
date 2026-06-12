@@ -47,6 +47,41 @@ type AccessoProfilo = {
   stato?: string;
   manuale?: boolean;
   uscitaManuale?: boolean;
+  uscitaByAdmin?: boolean;
+};
+
+const GIORNI_APERTURA_SETTIMANALI = 5;
+
+const toNumeroSicuro = (valore: unknown) => {
+  const numero = Number(valore);
+  return Number.isFinite(numero) ? numero : 0;
+};
+
+const calcolaRecuperoMassimoDaFrequenzaBase = (frequenzaBase: number) => {
+  if (frequenzaBase >= 5) {
+    return 0;
+  }
+
+  if (frequenzaBase === 4) {
+    return 1;
+  }
+
+  return Math.max(GIORNI_APERTURA_SETTIMANALI - frequenzaBase, 0);
+};
+
+const calcolaFrequenzaBase = (frequenza: unknown, recupero: unknown) => {
+  const frequenzaSettimanale = toNumeroSicuro(frequenza);
+  const recuperoGg = toNumeroSicuro(recupero);
+
+  const frequenzaBase = Math.min(
+    Math.max(frequenzaSettimanale - recuperoGg, 0),
+    GIORNI_APERTURA_SETTIMANALI,
+  );
+
+  return {
+    frequenzaBase,
+    recuperoMassimo: calcolaRecuperoMassimoDaFrequenzaBase(frequenzaBase),
+  };
 };
 
 const normalizzaOrdinamento = (valore: unknown) =>
@@ -72,6 +107,20 @@ const ordinaSociPerCognome = (lista: any[]) =>
       { sensitivity: "base" },
     );
   });
+
+const getTestoIngressiSocio = (socio: any) => {
+  const ingressiUsati = toNumeroSicuro(socio.calc_frequenza);
+  const frequenza = toNumeroSicuro(socio.frequenza);
+
+  return `${ingressiUsati} su ${frequenza}`;
+};
+
+const haCompletatoIngressi = (socio: any) => {
+  const ingressiUsati = toNumeroSicuro(socio.calc_frequenza);
+  const frequenza = toNumeroSicuro(socio.frequenza);
+
+  return frequenza > 0 && ingressiUsati >= frequenza;
+};
 
 const formattaOrario = (
   timestamp?: { toDate?: () => Date },
@@ -800,9 +849,9 @@ export default function Iscritti() {
         }
 
         if (dataToNum(oggi) > dataToNum(scadenza)) {
-          const frequenzaBase = Math.min(
-            Math.max(frequenzaSettimanale - recuperoGg, 0),
-            5,
+          const { frequenzaBase } = calcolaFrequenzaBase(
+            frequenzaSettimanale,
+            recuperoGg,
           );
           const anomaliaDocRef = doc(
             collection(db, "anomalie", anno, mese, oggi, "eventi"),
@@ -1077,20 +1126,42 @@ export default function Iscritti() {
       </View>
 
       <ScrollView style={styles.scrollView}>
-        {sociDaMostrare.map((socio) => (
-          <View style={styles.itemRow} key={socio.id}>
-            <Ionicons name="ellipse-sharp" size={20} color="#64def3" />
-            <Text style={styles.itemText} numberOfLines={1}>
-              {socio.cognome} {socio.nome}
-            </Text>
-            {(socio.admin || isCardAdmin(socio.cardId || "")) && (
-              <Text style={styles.adminBadge}>Admin</Text>
-            )}
-            <TouchableOpacity onPress={() => apriModifica(socio)}>
-              <Text style={styles.itemText1}>Modifica</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+        {sociDaMostrare.map((socio) => {
+          const ingressiCompletati = haCompletatoIngressi(socio);
+
+          return (
+            <View
+              style={[
+                styles.itemRow,
+                ingressiCompletati && styles.itemRowCompleted,
+              ]}
+              key={socio.id}
+            >
+              <Ionicons
+                name="ellipse-sharp"
+                size={20}
+                color={ingressiCompletati ? "#e7bc83" : "#64def3"}
+              />
+              <Text style={styles.itemText} numberOfLines={1}>
+                {socio.cognome} {socio.nome}
+              </Text>
+              <Text
+                style={[
+                  styles.frequencyBadge,
+                  ingressiCompletati && styles.frequencyBadgeCompleted,
+                ]}
+              >
+                {getTestoIngressiSocio(socio)}
+              </Text>
+              {(socio.admin || isCardAdmin(socio.cardId || "")) && (
+                <Text style={styles.adminBadge}>Admin</Text>
+              )}
+              <TouchableOpacity onPress={() => apriModifica(socio)}>
+                <Text style={styles.itemText1}>Modifica</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })}
       </ScrollView>
 
       {/* MODAL NUOVO ISCRITTO */}
@@ -1366,21 +1437,26 @@ export default function Iscritti() {
                   </Text>
                   <Text style={styles.profileDayText}>
                     Uscita:{" "}
-                    {formattaOrario(
-                      accessoDataSelezionata.uscita,
-                      accessoDataSelezionata.uscita_ms,
-                    )}
+                    {accessoDataSelezionata.uscitaByAdmin
+                      ? "By Admin"
+                      : formattaOrario(
+                          accessoDataSelezionata.uscita,
+                          accessoDataSelezionata.uscita_ms,
+                        )}
                   </Text>
                   <Text style={styles.profileDaySubtext}>
                     Stato:{" "}
                     {accessoDataSelezionata.stato === "uscito" ||
-                    accessoDataSelezionata.uscita
+                    accessoDataSelezionata.uscita ||
+                    accessoDataSelezionata.uscita_ms
                       ? "Uscito"
                       : "Dentro"}
                     {accessoDataSelezionata.manuale
                       ? " - ingresso manuale"
                       : ""}
-                    {accessoDataSelezionata.uscitaManuale
+                    {accessoDataSelezionata.uscitaByAdmin
+                      ? " - uscita By Admin"
+                      : accessoDataSelezionata.uscitaManuale
                       ? " - uscita manuale"
                       : ""}
                   </Text>
@@ -1481,7 +1557,23 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 10,
   },
+  itemRowCompleted: {
+    backgroundColor: "#4a3516",
+    borderWidth: 1,
+    borderColor: "#e7bc83",
+  },
   itemText: { color: "#fff", fontSize: 16, marginLeft: 12, flex: 1 },
+  frequencyBadge: {
+    color: "#d8d8d8",
+    fontSize: 13,
+    fontWeight: "900",
+    minWidth: 54,
+    textAlign: "center",
+    marginHorizontal: 10,
+  },
+  frequencyBadgeCompleted: {
+    color: "#ffe1a8",
+  },
   adminBadge: {
     color: "#101010",
     backgroundColor: "#64def3",
