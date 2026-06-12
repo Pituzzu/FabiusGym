@@ -29,7 +29,7 @@ Quando il login va a buon fine, il gestore entra nella schermata principale.
 
 ## Passaggio card
 
-Quando un socio passa la card, l'app controlla chi e il socio collegato a quella card.
+Quando un socio passa la card, l'app controlla chi è il socio collegato a quella card.
 
 Se la card appartiene a un socio valido, l'app verifica la situazione del socio:
 
@@ -122,25 +122,9 @@ Esempi:
 
 - frequenza 5: non puo avere recuperi;
 - frequenza 4: puo avere massimo 1 recupero;
-- frequenza 3: recupera i giorni mancanti solo se e venuto almeno una volta.
+- frequenza 3: puo avere massimo 2 recuperi.
 
-Se un socio non viene proprio mai durante la settimana, prende 0 recuperi.
-Questo perche non ha iniziato la frequenza settimanale.
-
-Esempio frequenza 3:
-
-- viene 0 volte su 3: recuperi 0;
-- viene 1 volta su 3: recuperi 2;
-- viene 2 volte su 3: recuperi 1;
-- viene 3 volte su 3: recuperi 0.
-
-Esempio frequenza 4:
-
-- viene 0 volte su 4: recuperi 0;
-- viene 1, 2 o 3 volte su 4: recuperi massimo 1;
-- viene 4 volte su 4: recuperi 0.
-
-Il sistema limita i recuperi in modo che non si creino situazioni incoerenti rispetto ai 5 giorni di apertura.
+Il sistema limita i recuperi in modo che il totale non superi mai 5.
 
 ## Card admin recuperi
 
@@ -202,16 +186,6 @@ Da qui puo:
 
 I soci sono ordinati dalla A alla Z per cognome.
 
-Accanto a ogni socio viene mostrato il conteggio degli ingressi attuali.
-
-Esempio:
-
-```text
-1 su 3
-```
-
-Quando un socio arriva al massimo, per esempio `3 su 3`, la riga viene evidenziata con sfondo giallo/arancione.
-
 ## Creazione nuovo socio
 
 Quando viene creato un nuovo socio, vengono inseriti i suoi dati principali:
@@ -255,7 +229,6 @@ Selezionando un giorno, l'app mostra:
 - ora di uscita;
 - se l'ingresso e stato manuale;
 - se l'uscita e stata manuale.
-- se l'uscita e stata validata dal gestore come By Admin.
 
 Questo serve per ricostruire velocemente la presenza di una persona.
 
@@ -274,60 +247,6 @@ Serve per:
 Quando il passaggio card va bene, il gestore vede il messaggio corretto.
 
 Quando qualcosa non va, l'app crea un alert.
-
-## Appunti in Home
-
-La Home ha anche una sezione Appunti leggera e non invasiva.
-
-Il gestore puo aprire un modale e segnare promemoria o cose da sistemare.
-
-Per ogni appunto puo:
-
-- crearlo;
-- modificarlo;
-- cancellarlo;
-- segnarlo come risolto;
-- riaprirlo se serve.
-
-Se ci sono appunti non risolti, vicino al pulsante Appunti appare un numerino.
-
-Gli appunti risolti restano consultabili ma non contano nel numerino.
-
-## Uscita non timbrata
-
-Se un socio entra ma non timbra l'uscita, l'app controlla la fascia oraria.
-
-Fascia mattina:
-
-- ingresso tra 10:00 e 14:00;
-- dopo le 14:00, se non ha timbrato l'uscita, viene segnalato.
-
-Fascia pomeriggio/sera:
-
-- ingresso tra 16:00 e 23:00;
-- dopo le 23:00, se non ha timbrato l'uscita, viene segnalato.
-
-In Home il socio compare in rosso cosi:
-
-```text
-Nome Cognome (uscita non timbrata)
-```
-
-Accanto compare il tasto:
-
-```text
-Valida uscita
-```
-
-Quando il gestore preme quel tasto, l'app chiude l'uscita come validata dal gestore.
-
-Nello storico questa uscita non viene mostrata come orario normale, ma come:
-
-```text
-OUT: By Admin
-```
-
-Il venerdi sera, quando passa la card admin, l'app chiude automaticamente anche le uscite non timbrate gia scadute.
 
 ## Sezione Alert
 
@@ -379,7 +298,6 @@ Il gestore puo:
 - andare al giorno successivo;
 - controllare orario di ingresso;
 - controllare orario di uscita.
-- vedere `OUT: By Admin` quando l'uscita e stata chiusa dal gestore.
 
 Gli ingressi sono ordinati dal piu recente.
 
@@ -444,6 +362,3 @@ Queste sono le regole pratiche piu importanti:
 - Lo storico deve mostrare ingressi e uscite del giorno corretto.
 - Il profilo socio deve mostrare il calendario delle presenze.
 - Gli alert rimossi dal gestore non devono restare visibili.
-- Gli appunti risolti non devono contare nel numerino.
-- Le uscite non timbrate scadute devono essere validabili come By Admin.
-- In Iscritti deve comparire il conteggio `x su n` e lo sfondo giallo/arancione su `n su n`.
